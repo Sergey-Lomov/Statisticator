@@ -1,0 +1,29 @@
+{
+  "initialMenu": "menu1",
+  "menus" : [
+    {
+      "id": "menu1",
+      "items" : ["op1", "op2"]
+    },
+    {
+      "id": "menu2",
+      "items" : ["op1", "op3"]
+    }
+  ],
+  "items": [
+    {
+      "id": "op1",
+      "title": "JSON option 1",
+      "type": "menu",
+      "target": "menu2"
+    },
+    {
+      "id": "op2",
+      "title": "JSON option 2"
+    },
+    {
+      "id": "op3",
+      "title": "JSON option 3"
+    }
+  ]
+}
