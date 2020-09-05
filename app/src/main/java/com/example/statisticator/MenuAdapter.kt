@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.statisticator.models.MenuModel
 
-class MenuAdapter(private val model: MenuModel, private val delegate: MenuFragmentDelegate?) :
+class MenuAdapter(private var model: MenuModel, private val delegate: MenuFragmentDelegate?) :
     RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -39,7 +39,8 @@ class MenuAdapter(private val model: MenuModel, private val delegate: MenuFragme
 
     override fun getItemCount() = model.items.size
 
-    companion object {
-        private val TAG = "MenuAdapter"
+    fun updateModel(model: MenuModel) {
+        this.model = model
+        notifyDataSetChanged()
     }
 }

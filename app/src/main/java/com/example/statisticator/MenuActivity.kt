@@ -8,20 +8,17 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.navigation.fragment.NavHostFragment
 import com.example.statisticator.models.ItemTargetType
 import com.example.statisticator.models.MenuItemModel
 import com.example.statisticator.models.MenuModel
 import com.example.statisticator.models.SchemaModel
 import com.example.statisticator.service.SchemaLoader
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
+import java.util.*
+import kotlin.concurrent.schedule
 
 
-class MainActivity : AppCompatActivity(), MenuFragmentDelegate {
+class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
 
     private lateinit var schema: SchemaModel
     private val CONTENT_VIEW_ID = 101
@@ -41,15 +38,7 @@ class MainActivity : AppCompatActivity(), MenuFragmentDelegate {
         setContentView(frame, params)
 
         if (savedInstanceState == null) {
-//            val finalHost = NavHostFragment.create(R.navigation.nav_graph)
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.MenuFragment, finalHost)
-//                .setPrimaryNavigationFragment(finalHost) // equivalent to app:defaultNavHost="true"
-//                .commit()
-            val newFragment: MenuFragment = MenuFragment.newInstance(schema.initalMenu)
-            newFragment.delegate = this
-            val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
-            ft.add(CONTENT_VIEW_ID, newFragment).commit()
+            showMenu(schema.initalMenu, false)
         }
     }
 
@@ -83,11 +72,22 @@ class MainActivity : AppCompatActivity(), MenuFragmentDelegate {
         }
     }
 
-    private fun showMenu(menu: MenuModel) {
+    private fun showMenu(menu: MenuModel, animated: Boolean = true) {
         val newFragment: MenuFragment = MenuFragment.newInstance(menu)
         newFragment.delegate = this
-        val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
-//        ft.add(CONTENT_VIEW_ID, newFragment).commit()
-        ft.replace(CONTENT_VIEW_ID, newFragment)
+//        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+//        if (animated)
+//            transaction.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+//        else
+//            transaction.setCustomAnimations(0, R.anim.slide_out_to_left)
+//        transaction.replace(CONTENT_VIEW_ID, newFragment).addToBackStack(null).commit()
+        supportFragmentManager.beginTransaction()
+            .replace(CONTENT_VIEW_ID, newFragment)
+            .addToBackStack(null)
+            .commit()
+
+//        Timer("SettingUp", false).schedule(1000) {
+//            showMenu(menu, true)
+//        }
     }
 }

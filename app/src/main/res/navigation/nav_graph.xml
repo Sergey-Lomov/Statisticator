@@ -9,7 +9,7 @@
         android:id="@+id/MenuFragment"
         android:name="com.example.statisticator.MenuFragment"
         android:label="@string/menu_fragment_label"
-        tools:layout="@layout/fragment_menu" >
+        tools:layout="@layout/menu_fragment" >
         <action
             android:id="@+id/action_MenuFragment_self"
             app:destination="@id/MenuFragment" />

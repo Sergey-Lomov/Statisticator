@@ -24,7 +24,7 @@ class MenuFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_menu, container, false)
+        val rootView = inflater.inflate(R.layout.menu_fragment, container, false)
         recyclerView = rootView.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = MenuAdapter(model, delegate)
@@ -33,6 +33,11 @@ class MenuFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    fun updateModel(model: MenuModel) {
+        val adapter = recyclerView.adapter as? MenuAdapter ?: return
+        adapter.updateModel(model)
     }
 
     companion object {
