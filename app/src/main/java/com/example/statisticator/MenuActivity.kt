@@ -1,45 +1,42 @@
 package com.example.statisticator
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
 import com.example.statisticator.models.ItemTargetType
 import com.example.statisticator.models.MenuItemModel
 import com.example.statisticator.models.MenuModel
-import com.example.statisticator.models.SchemaModel
 import com.example.statisticator.service.SchemaLoader
-import java.util.*
-import kotlin.concurrent.schedule
 
 
 class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
 
-    private lateinit var schema: SchemaModel
-    private val CONTENT_VIEW_ID = 101
+    private val MENU_EXTRAS_KEY = "menuModel"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val schemaId = resources.getIdentifier("rk_schema", "raw", packageName)
-        val stream = resources.openRawResource(schemaId)
-        val json = stream.bufferedReader().use { it.readText() }
-        schema = SchemaLoader().loadFromJson(json)
-
-        //setContentView(R.layout.activity_main)
-        val frame = FrameLayout(this)
-        frame.id = CONTENT_VIEW_ID
-        val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
-        setContentView(frame, params)
-
-        if (savedInstanceState == null) {
-            showMenu(schema.initalMenu, false)
+        val menuExtras = intent.extras?.get(MENU_EXTRAS_KEY) as? MenuModel
+        val menu = if (menuExtras != null) {
+            menuExtras
+        } else {
+            val schemaId = resources.getIdentifier("rk_schema", "raw", packageName)
+            val stream = resources.openRawResource(schemaId)
+            val json = stream.bufferedReader().use { it.readText() }
+            val schema = SchemaLoader().loadFromJson(json)
+            schema.initalMenu
         }
+
+        setContentView(R.layout.menu_activity)
+
+        val menuFragment = supportFragmentManager.findFragmentById(R.id.menu_fragment) as? MenuFragment
+        menuFragment?.updateModel(menu)
+        menuFragment?.delegate = this
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
@@ -48,7 +45,7 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
+       // menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
@@ -73,21 +70,9 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
     }
 
     private fun showMenu(menu: MenuModel, animated: Boolean = true) {
-        val newFragment: MenuFragment = MenuFragment.newInstance(menu)
-        newFragment.delegate = this
-//        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-//        if (animated)
-//            transaction.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
-//        else
-//            transaction.setCustomAnimations(0, R.anim.slide_out_to_left)
-//        transaction.replace(CONTENT_VIEW_ID, newFragment).addToBackStack(null).commit()
-        supportFragmentManager.beginTransaction()
-            .replace(CONTENT_VIEW_ID, newFragment)
-            .addToBackStack(null)
-            .commit()
-
-//        Timer("SettingUp", false).schedule(1000) {
-//            showMenu(menu, true)
-//        }
+        val intent = Intent(this@MenuActivity, MenuActivity::class.java)
+        intent.putExtra(MENU_EXTRAS_KEY, menu)
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
     }
 }

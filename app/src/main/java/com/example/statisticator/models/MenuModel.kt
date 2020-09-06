@@ -1,7 +1,5 @@
 package com.example.statisticator.models
 
-import com.google.gson.annotations.SerializedName
-
 data class MenuModel (
     val id: String,
     val type: MenuType,

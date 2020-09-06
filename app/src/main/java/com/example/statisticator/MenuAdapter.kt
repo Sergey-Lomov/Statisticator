@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.statisticator.models.MenuModel
 
-class MenuAdapter(private var model: MenuModel, private val delegate: MenuFragmentDelegate?) :
+class MenuAdapter(private var model: MenuModel, var delegate: MenuFragmentDelegate? = null) :
     RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {

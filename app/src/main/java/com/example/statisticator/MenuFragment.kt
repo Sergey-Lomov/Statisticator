@@ -16,9 +16,16 @@ interface MenuFragmentDelegate {
 
 class MenuFragment : Fragment() {
 
-    var delegate: MenuFragmentDelegate? = null
+    var delegate: MenuFragmentDelegate?
+        set(value) {
+            val adapter = recyclerView.adapter as? MenuAdapter
+            adapter?.delegate = value
+        }
+        get() = {
+            val adapter = recyclerView.adapter as? MenuAdapter
+            adapter?.delegate
+        }()
     private lateinit var recyclerView: RecyclerView
-    private lateinit var model: MenuModel
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -27,7 +34,6 @@ class MenuFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.menu_fragment, container, false)
         recyclerView = rootView.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = MenuAdapter(model, delegate)
         return rootView
     }
 
@@ -36,15 +42,11 @@ class MenuFragment : Fragment() {
     }
 
     fun updateModel(model: MenuModel) {
-        val adapter = recyclerView.adapter as? MenuAdapter ?: return
-        adapter.updateModel(model)
-    }
-
-    companion object {
-        fun newInstance(menu: MenuModel): MenuFragment {
-            val fragment = MenuFragment()
-            fragment.model = menu
-            return fragment
+        val adapter = recyclerView.adapter as? MenuAdapter
+        if (adapter != null) {
+            adapter?.updateModel(model)
+        } else {
+            recyclerView.adapter = MenuAdapter(model, delegate)
         }
     }
 }

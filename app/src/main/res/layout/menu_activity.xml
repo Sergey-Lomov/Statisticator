@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        layout="@layout/menu_fragment"
+    <fragment
+        android:id="@+id/menu_fragment"
+        android:name="com.example.statisticator.MenuFragment"
+        class="com.example.statisticator.MenuFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
