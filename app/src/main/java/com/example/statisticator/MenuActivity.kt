@@ -28,8 +28,8 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
             val schemaId = resources.getIdentifier("rk_schema", "raw", packageName)
             val stream = resources.openRawResource(schemaId)
             val json = stream.bufferedReader().use { it.readText() }
-            val schema = SchemaLoader().loadFromJson(json)
-            schema.initalMenu
+            val result = SchemaLoader().loadFromJson(json)
+            result.schema.initalMenu
         }
 
         setContentView(R.layout.menu_activity)

@@ -23,7 +23,24 @@
     },
     {
       "id": "op3",
-      "title": "JSON option 3"
+      "title": "JSON option 3",
+      "type": "event",
+      "target": "event1"
+    }
+  ],
+  "events": [
+    {
+      "id": "event1",
+      "title": "Demo event 1",
+      "attributes": [
+        {
+          "id": "e1atr1",
+          "type": "number_interval",
+          "title": "Demo interval",
+          "minValue": 3,
+          "maxValue": 30
+        }
+      ]
     }
   ]
 }
