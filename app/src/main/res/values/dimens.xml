@@ -4,4 +4,9 @@
     <dimen name="menu_item_height">80dp</dimen>
     <dimen name="menu_item_icon_size">60dp</dimen>
     <dimen name="menu_item_hor_insets">10dp</dimen>
+
+    <dimen name="attribute_title_hor_insets">20dp</dimen>
+    <dimen name="attribute_title_vert_insets">10dp</dimen>
+    <dimen name="attribute_value_hor_insets">15dp</dimen>
+
 </resources>

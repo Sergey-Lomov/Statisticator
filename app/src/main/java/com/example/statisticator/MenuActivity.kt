@@ -8,20 +8,17 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.statisticator.models.ItemTargetType
-import com.example.statisticator.models.MenuItemModel
-import com.example.statisticator.models.MenuModel
+import com.example.statisticator.constants.Constants
+import com.example.statisticator.models.*
 import com.example.statisticator.service.SchemaLoader
 
 
 class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
 
-    private val MENU_EXTRAS_KEY = "menuModel"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val menuExtras = intent.extras?.get(MENU_EXTRAS_KEY) as? MenuModel
+        val menuExtras = intent.extras?.get(Constants.MENU_EXTRAS_KEY) as? MenuModel
         val menu = if (menuExtras != null) {
             menuExtras
         } else {
@@ -39,26 +36,6 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
         menuFragment?.delegate = this
     }
 
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        return super.onCreateView(name, context, attrs)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-       // menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun itemClick(item: MenuItemModel) {
         val type = item.target?.targetType ?: return
         when(type) {
@@ -66,12 +43,24 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
                 val menu = item.target as? MenuModel ?: return
                 showMenu(menu)
             }
+            ItemTargetType.Event -> {
+                val eventModel = item.target as? EventModel ?: return
+                showEventEditing(eventModel)
+            }
         }
     }
 
-    private fun showMenu(menu: MenuModel, animated: Boolean = true) {
+    private fun showMenu(model: MenuModel) {
         val intent = Intent(this@MenuActivity, MenuActivity::class.java)
-        intent.putExtra(MENU_EXTRAS_KEY, menu)
+        intent.putExtra(Constants.MENU_EXTRAS_KEY, model)
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+    }
+
+    private fun showEventEditing(model: EventModel) {
+        val intent = Intent(this, EventEditingActivity::class.java)
+        val event = Event(model)
+        intent.putExtra(Constants.EVENT_EXTRAS_KEY, event)
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
     }

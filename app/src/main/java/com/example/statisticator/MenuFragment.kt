@@ -37,10 +37,6 @@ class MenuFragment : Fragment() {
         return rootView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     fun updateModel(model: MenuModel) {
         val adapter = recyclerView.adapter as? MenuAdapter
         if (adapter != null) {
