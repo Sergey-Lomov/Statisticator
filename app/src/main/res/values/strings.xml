@@ -4,6 +4,5 @@
     <!-- Strings used for fragments for navigation -->
     <string name="menu_fragment_label">Menu Fragment</string>
 
-    <string name="alert_item_without_target">Item %1$title has no target or type</string>
-    <string name="alert_attributes_unparsed">Some attributes in %1$s was not be parsed</string>
+    <string name="save_button_title">Сохранить событие</string>
 </resources>

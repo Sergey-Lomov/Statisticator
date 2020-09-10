@@ -4,6 +4,7 @@ import com.example.statisticator.models.attributes.EventAttributeModel
 
 data class EventModel (
     val id: String,
+    val type: String,
     val title: String? = null,
     val attributes: ArrayList<EventAttributeModel> = ArrayList()
 ): ItemTarget {

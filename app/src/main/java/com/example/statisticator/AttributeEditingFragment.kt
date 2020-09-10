@@ -23,6 +23,7 @@ interface ValueEditorDelegate: Serializable {
 class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
 
     private var delegate: AttributeEditorDelegate? = null
+    private var initialValue: Serializable? = null
     private lateinit var attribute: EventAttributeModel
     private lateinit var valueTextView: TextView
 
@@ -31,6 +32,7 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
         savedInstanceState: Bundle?
     ): View? {
         delegate = arguments?.get(Constants.DELEGATE_BUNDLE_KEY) as AttributeEditorDelegate?
+        initialValue = arguments?.get(Constants.INITIAL_VALUE_BUNDLE_KEY) as Serializable?
         attribute = arguments?.get(Constants.ATTRIBUTE_BUNDLE_KEY) as EventAttributeModel? ?:
                 throw Exception("Create attribute editing fragment with no attribute in arguments")
 
@@ -38,6 +40,7 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
         val titleTextView = rootView.findViewById<TextView>(R.id.title)
         titleTextView.text = attribute.title
         valueTextView = rootView.findViewById(R.id.value)
+        valueTextView.text = if (initialValue != null) initialValue!!.toString() else Constants.EMPTY_VALUE_STUB
 
         val fragment = when (attribute) {
             is NumberIntervalAttribute -> NumberIntervalFragment.newInstance(attribute as NumberIntervalAttribute, this)
@@ -58,9 +61,11 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
 
     companion object {
         fun newInstance(attribute: EventAttributeModel,
+                        initialValue: Serializable? = null,
                         delegate: AttributeEditorDelegate? = null) = AttributeEditingFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(Constants.ATTRIBUTE_BUNDLE_KEY, attribute)
+                putSerializable(Constants.INITIAL_VALUE_BUNDLE_KEY, initialValue)
                 putSerializable(Constants.DELEGATE_BUNDLE_KEY, delegate)
             }
         }

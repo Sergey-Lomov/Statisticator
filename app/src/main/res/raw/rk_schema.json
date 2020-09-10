@@ -31,6 +31,7 @@
   "events": [
     {
       "id": "event1",
+      "type": "mining",
       "title": "Demo event 1",
       "attributes": [
         {

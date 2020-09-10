@@ -9,10 +9,9 @@
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/attribute_title_hor_insets"
-        android:layout_marginTop="@dimen/attribute_title_vert_insets"
-        android:layout_marginEnd="@dimen/attribute_value_hor_insets"
-        android:layout_marginBottom="@dimen/attribute_title_vert_insets"
+        android:layout_marginStart="@dimen/attribute_content_hor_insets"
+        android:layout_marginTop="@dimen/attribute_content_vert_insets"
+        android:layout_marginBottom="@dimen/attribute_value_editing_vert_insets"
         android:fontFamily="sans-serif-black"
         android:text="Attribute title"
         android:textSize="18sp"
@@ -23,21 +22,24 @@
 
     <TextView
         android:id="@+id/value"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="@dimen/attribute_content_hor_insets"
         android:fontFamily="sans-serif-black"
         android:text="Value"
         android:textAlignment="viewEnd"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/title"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/title"
         app:layout_constraintTop_toTopOf="@+id/title" />
 
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/attribute_content_vert_insets"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

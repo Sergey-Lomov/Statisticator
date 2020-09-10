@@ -32,11 +32,14 @@ class NumberIntervalFragment : Fragment(), OptionsListDelegate {
             options.add(i.toString())
 
         val rootView = inflater.inflate(R.layout.number_interval_fragment, container, false)
+
         val recyclerView: RecyclerView = rootView.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(activity, Constants.LIST_ITEMS_PER_ROW)
-        val decoration = GridSpacingItemDecoration(Constants.LIST_ITEMS_PER_ROW, 20, true)
+        val spacing = getResources().getDimension(R.dimen.list_items_space).toInt()
+        val decoration = GridSpacingItemDecoration(Constants.LIST_ITEMS_PER_ROW, spacing, false)
         recyclerView.addItemDecoration(decoration)
         recyclerView.adapter = OptionsListAdapter(options.toTypedArray(), this)
+
         return rootView
     }
 
