@@ -5,4 +5,4 @@ data class NumberIntervalAttribute (
     override val title: String,
     val minValue: Int,
     val maxValue: Int
-): EventAttributeModel
+): EventAttribute

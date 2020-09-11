@@ -1,6 +1,5 @@
 package com.example.statisticator
 
-import android.R.attr.spacing
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.statisticator.constants.Constants
-import com.example.statisticator.models.attributes.EventAttributeModel
 import com.example.statisticator.models.attributes.NumberIntervalAttribute
 import com.example.statisticator.uihelpers.GridSpacingItemDecoration
-import java.io.Serializable
 
 class NumberIntervalFragment : Fragment(), OptionsListDelegate {
 

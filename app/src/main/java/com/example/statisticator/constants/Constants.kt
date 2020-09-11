@@ -11,5 +11,9 @@ class Constants {
 
         val EMPTY_VALUE_STUB = "---"
         val LIST_ITEMS_PER_ROW = 5
+
+        val EVENT_ID_KEY = "id"
+        val EVENT_TYPE_KEY = "type"
+        val EVENT_TIMESTAMP_KEY = "timestamp"
     }
 }

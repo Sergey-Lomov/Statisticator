@@ -1,16 +1,11 @@
 package com.example.statisticator.service
 
-import android.content.res.Resources
-import com.example.statisticator.R
 import com.example.statisticator.models.*
-import com.example.statisticator.models.attributes.EventAttributeModel
+import com.example.statisticator.models.attributes.EventAttribute
 import com.example.statisticator.models.attributes.NumberIntervalAttribute
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 import java.lang.Exception
-import kotlin.reflect.KClass
 
 class SchemaLoader {
 
@@ -23,7 +18,7 @@ class SchemaLoader {
 
     private data class MenuItemPrototype (val id: String, val title: String, val type: ItemTargetType?, val target: String?)
     private data class MenuPrototype(val id: String, val type: MenuType?, val items: Array<String>)
-    private data class EventPrototype(val id: String, val title: String? = null, val attributes: Array<JsonObject>)
+    private data class EventPrototype(val id: String, val type: String, val title: String? = null, val attributes: Array<JsonObject>)
     private data class SchemaPrototype (val initialMenu: String,
                                         val menus: Array<MenuPrototype>,
                                         val items: Array<MenuItemPrototype>,
@@ -39,7 +34,7 @@ class SchemaLoader {
         val menus = menusToPrototypes.keys
         val itemsToPrototypes = schemaPrototype.items.associateBy({ MenuItemModel(it.id, it.title) }, {it})
         val items = itemsToPrototypes.keys
-        val eventsToPrototypes = schemaPrototype.events.associateBy({ EventModel(it.id, it.title) }, {it})
+        val eventsToPrototypes = schemaPrototype.events.associateBy({ EventModel(it.id, it.type, it.title) }, {it})
         val events = eventsToPrototypes.keys
 
         val initialMenu = menus.first { it.id == schemaPrototype.initialMenu }
@@ -74,14 +69,14 @@ class SchemaLoader {
 
     private fun attributesFrom(objects: Array<JsonObject>,
                                event: EventModel,
-                               report: SchemaLoadingReport): ArrayList<EventAttributeModel> {
-        val attributes = ArrayList<EventAttributeModel>()
+                               report: SchemaLoadingReport): ArrayList<EventAttribute> {
+        val attributes = ArrayList<EventAttribute>()
         val typeKey = ParsingKeys.attributeType.value
         objects.forEach eachAttribute@{
             try {
                 val type = it[typeKey].asString
                 val attributeClass = attributedTypeToClass[type]!!.java
-                val attribute = Gson().fromJson(it, attributeClass) as EventAttributeModel
+                val attribute = Gson().fromJson(it, attributeClass) as EventAttribute
                 attributes.add(attribute)
             }
             catch(e: Exception) {

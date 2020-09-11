@@ -1,16 +1,13 @@
 package com.example.statisticator
 
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.Event
-import com.example.statisticator.models.attributes.EventAttributeModel
+import com.example.statisticator.models.attributes.EventAttribute
 import com.example.statisticator.service.DataStoreManager
 import java.io.Serializable
 
@@ -41,10 +38,11 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
     }
 
     private fun saveEvent() {
-        DataStoreManager().saveEvent(event)
+        DataStoreManager(this).saveEvent(event)
+        finish()
     }
 
-    override fun attributeValueDidChanged(attribute: EventAttributeModel, value: Serializable) {
+    override fun attributeValueDidChanged(attribute: EventAttribute, value: Serializable) {
         event.attributes[attribute.id] = value
     }
 }

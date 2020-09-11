@@ -1,12 +1,7 @@
 package com.example.statisticator
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.*
@@ -59,7 +54,8 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
 
     private fun showEventEditing(model: EventModel) {
         val intent = Intent(this, EventEditingActivity::class.java)
-        val event = Event(model)
+        val timestamp = System.currentTimeMillis().toString()
+        val event = Event(model, timestamp)
         intent.putExtra(Constants.EVENT_EXTRAS_KEY, event)
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)

@@ -1,9 +1,7 @@
 package com.example.statisticator.service
 
 import com.example.statisticator.models.EventModel
-import com.example.statisticator.models.ItemTarget
 import com.example.statisticator.models.MenuItemModel
-import com.example.statisticator.models.attributes.EventAttributeModel
 
 sealed class SchemaLoadingIssue
 data class ItemWithoutTarget(val item: MenuItemModel) : SchemaLoadingIssue()
