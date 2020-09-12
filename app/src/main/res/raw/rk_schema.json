@@ -1,45 +1,58 @@
 {
-  "initialMenu": "menu1",
+  "initialMenu": "start",
   "menus" : [
     {
-      "id": "menu1",
-      "items" : ["op1", "op2"]
-    },
-    {
-      "id": "menu2",
-      "items" : ["op1", "op3"]
+      "id": "start",
+      "items" : ["start_game", "mining"]
     }
   ],
   "items": [
     {
-      "id": "op1",
-      "title": "JSON option 1",
-      "type": "menu",
-      "target": "menu2"
-    },
-    {
-      "id": "op2",
-      "title": "JSON option 2"
-    },
-    {
-      "id": "op3",
-      "title": "JSON option 3",
+      "id": "start_game",
+      "title": "Начать игру",
       "type": "event",
-      "target": "event1"
+      "target": "start_game"
+    },
+    {
+      "id": "mining",
+      "title": "Добыча ТЗ",
+      "type": "event",
+      "target": "mining"
     }
   ],
   "events": [
     {
-      "id": "event1",
-      "type": "mining",
-      "title": "Demo event 1",
+      "id": "start_game",
+      "type": "start_game",
+      "title": "Начать игру",
       "attributes": [
         {
-          "id": "e1atr1",
+          "id": "players_amount",
           "type": "number_interval",
-          "title": "Demo interval",
+          "title": "Количество игроков",
           "minValue": 3,
-          "maxValue": 30
+          "maxValue": 6
+        }
+      ],
+      "modificators": [
+        {
+          "type": "add_addition",
+          "attribute": "game_id",
+          "valueKey": "id"
+        }
+      ]
+    },
+    {
+      "id": "mining",
+      "type": "mining",
+      "title": "Добыча ТЗ",
+      "attributes": [
+        {
+          "id": "radius",
+          "type": "number_interval",
+          "title": "Радиус добычи",
+          "minValue": 0,
+          "maxValue": 4
         }
       ]
     }

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.statisticator.constants.Constants
-import com.example.statisticator.models.attributes.NumberIntervalAttribute
+import com.example.statisticator.models.schema.attributes.NumberIntervalAttribute
 import com.example.statisticator.uihelpers.GridSpacingItemDecoration
 
 class NumberIntervalFragment : Fragment(), OptionsListDelegate {

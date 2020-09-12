@@ -1,4 +1,4 @@
-package com.example.statisticator.models
+package com.example.statisticator.models.schema
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable

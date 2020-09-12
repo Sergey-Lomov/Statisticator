@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.statisticator.models.MenuItemModel
-import com.example.statisticator.models.MenuModel
+import com.example.statisticator.models.schema.MenuItemModel
+import com.example.statisticator.models.schema.MenuModel
 
 interface MenuFragmentDelegate {
     fun itemClick(item: MenuItemModel)

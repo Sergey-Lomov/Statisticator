@@ -1,13 +1,12 @@
 package com.example.statisticator
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.statisticator.models.MenuModel
+import com.example.statisticator.models.schema.MenuModel
 
 class MenuAdapter(private var model: MenuModel, var delegate: MenuFragmentDelegate? = null) :
     RecyclerView.Adapter<MenuAdapter.ViewHolder>() {

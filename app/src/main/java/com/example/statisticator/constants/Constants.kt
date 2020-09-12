@@ -5,6 +5,8 @@ class Constants {
     companion object {
         val MENU_EXTRAS_KEY = "menuModel"
         val EVENT_EXTRAS_KEY = "eventModel"
+        val SESSION_STATE_EXTRAS_KEY = "sessionState"
+
         val DELEGATE_BUNDLE_KEY = "delegate"
         val ATTRIBUTE_BUNDLE_KEY = "attribute"
         val INITIAL_VALUE_BUNDLE_KEY = "initialValue"

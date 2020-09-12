@@ -1,4 +1,4 @@
-package com.example.statisticator.models
+package com.example.statisticator.models.schema
 
 import java.io.Serializable
 
