@@ -6,7 +6,6 @@ import com.example.statisticator.models.schema.*
 import com.example.statisticator.models.schema.modificators.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import org.json.JSONObject
 import java.lang.Exception
 
 class SchemaLoader {
@@ -36,7 +35,9 @@ class SchemaLoader {
                                           val icon: String?,
                                           val type: ItemTargetType?,
                                           val target: String?)
-    private data class MenuPrototype(val id: String, val type: MenuType?, val items: Array<String>)
+    private data class MenuPrototype(val id: String,
+                                     val style: MenuStyle?,
+                                     val items: Array<String>)
     private data class SchemaPrototype (val title: String,
                                         val initialMenu: String,
                                         val menus: Array<MenuPrototype>,
@@ -52,7 +53,7 @@ class SchemaLoader {
         val menusToPrototypes = schemaPrototype.menus.associateBy({
             MenuModel(
                 it.id,
-                it.type ?: MenuType.Full
+                it.style ?: MenuStyle.Full
             )
         }, {it})
         val menus = menusToPrototypes.keys

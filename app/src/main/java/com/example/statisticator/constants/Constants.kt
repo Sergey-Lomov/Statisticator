@@ -13,6 +13,7 @@ class Constants {
 
         val EMPTY_VALUE_STUB = "---"
         val LIST_ITEMS_PER_ROW = 5
+        val MENU_ITEMS_PER_ROW = 4
 
         val EVENT_ID_KEY = "id"
         val EVENT_TYPE_KEY = "type"

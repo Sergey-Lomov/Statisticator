@@ -5,11 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.MenuItemModel
 import com.example.statisticator.models.schema.MenuModel
+import com.example.statisticator.models.schema.MenuStyle
 import com.example.statisticator.service.SchemasManager
+import com.example.statisticator.uihelpers.GridSpacingItemDecoration
 
 interface MenuFragmentDelegate {
     fun itemClick(item: MenuItemModel)
@@ -44,7 +48,23 @@ class MenuFragment : Fragment() {
             adapter?.updateModel(model)
         } else {
             val iconsFolder = SchemasManager(requireContext()).iconFolder()
+            when (model.style) {
+                MenuStyle.Full -> setupFullLayout()
+                MenuStyle.Short -> setupShortLayout()
+            }
             recyclerView.adapter = MenuAdapter(model, iconsFolder, delegate)
         }
     }
+
+    private fun setupFullLayout() {
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+    }
+
+    private fun setupShortLayout() {
+        val spacing = resources.getDimension(R.dimen.list_items_space).toInt()
+        val decoration = GridSpacingItemDecoration(Constants.MENU_ITEMS_PER_ROW, spacing, true)
+        recyclerView.addItemDecoration(decoration)
+        recyclerView.layoutManager = GridLayoutManager(activity, Constants.MENU_ITEMS_PER_ROW)
+    }
+
 }
