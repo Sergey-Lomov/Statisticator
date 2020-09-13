@@ -31,9 +31,14 @@ class SchemaLoader {
                                       val title: String? = null,
                                       val attributes: Array<JsonObject>?,
                                       val modificators: Array<JsonObject>?)
-    private data class MenuItemPrototype (val id: String, val title: String, val type: ItemTargetType?, val target: String?)
+    private data class MenuItemPrototype (val id: String,
+                                          val title: String,
+                                          val icon: String?,
+                                          val type: ItemTargetType?,
+                                          val target: String?)
     private data class MenuPrototype(val id: String, val type: MenuType?, val items: Array<String>)
-    private data class SchemaPrototype (val initialMenu: String,
+    private data class SchemaPrototype (val title: String,
+                                        val initialMenu: String,
                                         val menus: Array<MenuPrototype>,
                                         val items: Array<MenuItemPrototype>,
                                         val events: Array<EventPrototype>)
@@ -51,13 +56,16 @@ class SchemaLoader {
             )
         }, {it})
         val menus = menusToPrototypes.keys
+
         val itemsToPrototypes = schemaPrototype.items.associateBy({
             MenuItemModel(
                 it.id,
-                it.title
+                it.title,
+                it.icon
             )
         }, {it})
         val items = itemsToPrototypes.keys
+
         val eventsToPrototypes = schemaPrototype.events.associateBy({
             EventModel(
                 it.id,

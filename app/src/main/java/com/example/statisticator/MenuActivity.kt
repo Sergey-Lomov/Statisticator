@@ -1,8 +1,12 @@
 package com.example.statisticator
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.*
 import com.example.statisticator.models.schema.EventModel
@@ -10,7 +14,7 @@ import com.example.statisticator.models.schema.ItemTargetType
 import com.example.statisticator.models.schema.MenuItemModel
 import com.example.statisticator.models.schema.MenuModel
 import com.example.statisticator.service.DataStoreManager
-import com.example.statisticator.service.SchemaLoader
+import com.example.statisticator.service.SchemasManager
 
 
 class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
@@ -20,25 +24,26 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val menuExtras = intent.extras?.get(Constants.MENU_EXTRAS_KEY) as? MenuModel
-        val menu = if (menuExtras != null) {
-            menuExtras
-        } else {
-            val schemaId = resources.getIdentifier("rk_schema", "raw", packageName)
-            val stream = resources.openRawResource(schemaId)
-            val json = stream.bufferedReader().use { it.readText() }
-            val result = SchemaLoader().loadFromJson(json)
-            result.schema.initalMenu
-        }
+        val menu = intent.extras?.get(Constants.MENU_EXTRAS_KEY) as? MenuModel
+            ?: SchemasManager(this).loadLastSchema().initalMenu
 
         val sateExtras = intent.extras?.get(Constants.SESSION_STATE_EXTRAS_KEY) as? SessionState
         sessionState = sateExtras ?: DataStoreManager(this).loadSessionState()
 
         setContentView(R.layout.menu_activity)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         val menuFragment = supportFragmentManager.findFragmentById(R.id.menu_fragment) as? MenuFragment
         menuFragment?.updateModel(menu)
         menuFragment?.delegate = this
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_main, menu)
+        return true
     }
 
     override fun itemClick(item: MenuItemModel) {

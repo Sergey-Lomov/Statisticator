@@ -1,5 +1,6 @@
 package com.example.statisticator
 
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,12 +24,20 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.event_editing_activity)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-        event = intent.extras?.get(Constants.EVENT_EXTRAS_KEY) as? Event ?:
+        if (savedInstanceState == null) {
+            event = intent.extras?.get(Constants.EVENT_EXTRAS_KEY) as? Event ?:
                 throw Exception("Create event editing activity with no event in intent")
-        state = intent.extras?.get(Constants.SESSION_STATE_EXTRAS_KEY) as? SessionState ?:
+            state = intent.extras?.get(Constants.SESSION_STATE_EXTRAS_KEY) as? SessionState ?:
                 throw Exception("Create event editing activity with no session state in intent")
+            setupUI()
+        } else {
+            addSaveButton()
+        }
+    }
 
+    private fun setupUI () {
         val transaction = supportFragmentManager.beginTransaction()
         val editable = event.model.attributes.filterIsInstance<EditableAttribute>()
         editable.forEach() {
@@ -36,13 +45,17 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
             transaction.add(R.id.linear_layout, fragment)
         }
         transaction.runOnCommit {
-            val saveView = LayoutInflater.from(this).inflate(R.layout.save_button_item, null, false)
-            val saveButton = saveView.findViewById<Button>(R.id.saveButton)
-            saveButton.setOnClickListener { saveEvent() }
-            val layout = findViewById<LinearLayout>(R.id.linear_layout)
-            layout.addView(saveView)
+            addSaveButton()
         }
         transaction.commit()
+    }
+
+    private fun addSaveButton() {
+        val saveView = LayoutInflater.from(this).inflate(R.layout.save_button_item, null, false)
+        val saveButton = saveView.findViewById<Button>(R.id.saveButton)
+        saveButton.setOnClickListener { saveEvent() }
+        val layout = findViewById<LinearLayout>(R.id.linear_layout)
+        layout.addView(saveView)
     }
 
     private fun saveEvent() {

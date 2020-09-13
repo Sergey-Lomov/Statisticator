@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.statisticator.models.schema.MenuItemModel
 import com.example.statisticator.models.schema.MenuModel
+import com.example.statisticator.service.SchemasManager
 
 interface MenuFragmentDelegate {
     fun itemClick(item: MenuItemModel)
@@ -42,7 +43,8 @@ class MenuFragment : Fragment() {
         if (adapter != null) {
             adapter?.updateModel(model)
         } else {
-            recyclerView.adapter = MenuAdapter(model, delegate)
+            val iconsFolder = SchemasManager(requireContext()).iconFolder()
+            recyclerView.adapter = MenuAdapter(model, iconsFolder, delegate)
         }
     }
 }
