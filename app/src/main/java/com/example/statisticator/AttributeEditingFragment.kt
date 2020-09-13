@@ -10,6 +10,7 @@ import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.attributes.EditableAttribute
 import com.example.statisticator.models.schema.attributes.EventAttribute
 import com.example.statisticator.models.schema.attributes.NumberIntervalAttribute
+import com.example.statisticator.models.schema.attributes.TextFieldAttribute
 import java.io.Serializable
 
 interface AttributeEditorDelegate: Serializable {
@@ -31,9 +32,9 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        delegate = arguments?.get(Constants.DELEGATE_BUNDLE_KEY) as AttributeEditorDelegate?
-        initialValue = arguments?.get(Constants.INITIAL_VALUE_BUNDLE_KEY) as Serializable?
-        attribute = arguments?.get(Constants.ATTRIBUTE_BUNDLE_KEY) as EditableAttribute? ?:
+        delegate = arguments?.get(Constants.DELEGATE_BUNDLE_KEY) as? AttributeEditorDelegate
+        initialValue = arguments?.get(Constants.INITIAL_VALUE_BUNDLE_KEY) as? Serializable
+        attribute = arguments?.get(Constants.ATTRIBUTE_BUNDLE_KEY) as? EditableAttribute ?:
                 throw Exception("Create attribute editing fragment with no attribute in arguments")
 
         val rootView = inflater.inflate(R.layout.attribute_fragment, container, false)
@@ -43,11 +44,15 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
         valueTextView.text = if (initialValue != null) initialValue!!.toString() else Constants.EMPTY_VALUE_STUB
 
         val fragment = when (attribute) {
-            is NumberIntervalAttribute -> NumberIntervalFragment.newInstance(attribute as NumberIntervalAttribute, this)
+            is NumberIntervalAttribute -> NumberIntervalFragment.newInstance(attribute as NumberIntervalAttribute,
+                this)
+            is TextFieldAttribute -> TextFieldFragment.newInstance(attribute as TextFieldAttribute,
+                initialValue,
+                this)
             else -> throw Exception("Can't found value editing fragment for attribute")
         }
 
-        val transaction = parentFragmentManager.beginTransaction()
+        val transaction = childFragmentManager.beginTransaction()
         transaction.add(R.id.frame_layout, fragment)
         transaction.commit()
 

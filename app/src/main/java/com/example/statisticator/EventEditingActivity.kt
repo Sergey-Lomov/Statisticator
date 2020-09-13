@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.Event
 import com.example.statisticator.models.SessionState
@@ -38,11 +39,16 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
     }
 
     private fun setupUI () {
-        val transaction = supportFragmentManager.beginTransaction()
+        val fragments: MutableList<Fragment> = mutableListOf()
         val editable = event.model.attributes.filterIsInstance<EditableAttribute>()
         editable.forEach() {
             val fragment = AttributeEditingFragment.newInstance(it, event.attributes[it.id],this)
-            transaction.add(R.id.linear_layout, fragment)
+            fragments.add(fragment)
+        }
+
+        val transaction = supportFragmentManager.beginTransaction()
+        fragments.forEach() {
+            transaction.add(R.id.linear_layout, it)
         }
         transaction.runOnCommit {
             addSaveButton()

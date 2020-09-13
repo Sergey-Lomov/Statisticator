@@ -5,7 +5,7 @@
     {
       "id": "start",
       "items" : ["start_game", "mining"],
-      "style": "short"
+      "style": "full"
     }
   ],
   "items": [
@@ -35,6 +35,18 @@
           "title": "Количество игроков",
           "minValue": 3,
           "maxValue": 6
+        },
+        {
+          "id": "players_amount2",
+          "type": "number_interval",
+          "title": "Количество игроков",
+          "minValue": 13,
+          "maxValue": 26
+        },
+        {
+          "id": "players",
+          "type": "text_field",
+          "title": "Имена игроков"
         }
       ],
       "modificators": [

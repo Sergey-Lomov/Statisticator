@@ -3,6 +3,7 @@ package com.example.statisticator.service
 import com.example.statisticator.models.schema.attributes.EventAttribute
 import com.example.statisticator.models.schema.attributes.NumberIntervalAttribute
 import com.example.statisticator.models.schema.*
+import com.example.statisticator.models.schema.attributes.TextFieldAttribute
 import com.example.statisticator.models.schema.modificators.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -16,7 +17,10 @@ class SchemaLoader {
         id("id")
     }
 
-    private val attributedTypeToClass = mapOf("number_interval" to NumberIntervalAttribute::class)
+    private val attributedTypeToClass = mapOf(
+        "number_interval" to NumberIntervalAttribute::class,
+        "text_field" to TextFieldAttribute::class
+    )
     private val modificatorTypeToClass = mapOf(
         "add_addition" to AddAdditionModificator::class,
         "remove_addition" to RemoveAdditionModificator::class,
