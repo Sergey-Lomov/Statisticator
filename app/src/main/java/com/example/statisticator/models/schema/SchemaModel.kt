@@ -6,6 +6,6 @@ import java.io.Serializable
 
 data class SchemaModel (
     val initalMenu: MenuModel,
-    val menus: Array<MenuModel>,
-    val items: Array<MenuItemModel>
+    val menus: ArrayList<MenuModel>,
+    val items: ArrayList<MenuItemModel>
 ): Serializable

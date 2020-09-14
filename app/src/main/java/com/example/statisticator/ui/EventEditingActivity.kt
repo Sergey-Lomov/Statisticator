@@ -1,4 +1,4 @@
-package com.example.statisticator
+package com.example.statisticator.ui
 
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
@@ -7,14 +7,15 @@ import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import com.example.statisticator.R
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.Event
 import com.example.statisticator.models.SessionState
-import com.example.statisticator.models.schema.attributes.CalculatableAttribute
 import com.example.statisticator.models.schema.attributes.EditableAttribute
 import com.example.statisticator.models.schema.attributes.EventAttribute
-import com.example.statisticator.service.DataStoreManager
 import com.example.statisticator.service.EventProcessor
+import com.example.statisticator.ui.attributes.AttributeEditingFragment
+import com.example.statisticator.ui.attributes.AttributeEditorDelegate
 import java.io.Serializable
 
 class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {

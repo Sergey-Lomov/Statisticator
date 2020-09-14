@@ -1,4 +1,4 @@
-package com.example.statisticator
+package com.example.statisticator.ui
 
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.statisticator.R
 import com.example.statisticator.models.schema.MenuModel
 import com.example.statisticator.models.schema.MenuStyle
 import java.io.File

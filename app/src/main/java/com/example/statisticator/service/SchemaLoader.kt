@@ -3,23 +3,25 @@ package com.example.statisticator.service
 import com.example.statisticator.models.schema.attributes.EventAttribute
 import com.example.statisticator.models.schema.attributes.NumberIntervalAttribute
 import com.example.statisticator.models.schema.*
+import com.example.statisticator.models.schema.attributes.ColorsListAttribute
 import com.example.statisticator.models.schema.attributes.TextFieldAttribute
 import com.example.statisticator.models.schema.modificators.*
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import java.lang.Exception
 
 class SchemaLoader {
 
     private enum class ParsingKeys(val value: String) {
-        attributeType("type"),
-        modificatorType("type"),
-        id("id")
+        AttributeType("type"),
+        ModificatorType("type"),
+        Id("id")
     }
 
     private val attributedTypeToClass = mapOf(
         "number_interval" to NumberIntervalAttribute::class,
-        "text_field" to TextFieldAttribute::class
+        "text_field" to TextFieldAttribute::class,
+        "colors_list" to ColorsListAttribute::class
     )
     private val modificatorTypeToClass = mapOf(
         "add_addition" to AddAdditionModificator::class,
@@ -32,8 +34,8 @@ class SchemaLoader {
     private data class EventPrototype(val id: String,
                                       val type: String,
                                       val title: String? = null,
-                                      val attributes: Array<JsonObject>?,
-                                      val modificators: Array<JsonObject>?)
+                                      val attributes: ArrayList<JsonObject>?,
+                                      val modificators: ArrayList<JsonObject>?)
     private data class MenuItemPrototype (val id: String,
                                           val title: String,
                                           val icon: String?,
@@ -41,18 +43,22 @@ class SchemaLoader {
                                           val target: String?)
     private data class MenuPrototype(val id: String,
                                      val style: MenuStyle?,
-                                     val items: Array<String>)
+                                     val items: ArrayList<String>)
     private data class SchemaPrototype (val title: String,
                                         val initialMenu: String,
-                                        val menus: Array<MenuPrototype>,
-                                        val items: Array<MenuItemPrototype>,
-                                        val events: Array<EventPrototype>)
+                                        val menus: ArrayList<MenuPrototype>,
+                                        val items: ArrayList<MenuItemPrototype>,
+                                        val events: ArrayList<EventPrototype>)
+
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(ColorsListAttribute::class.java, ColorsListAttributeAdapter())
+        .create()
 
     data class Result(val schema: SchemaModel, val report: SchemaLoadingReport)
 
     fun loadFromJson(json: String): Result {
         val report = SchemaLoadingReport()
-        val schemaPrototype = Gson().fromJson(json, SchemaPrototype::class.java)
+        val schemaPrototype = gson.fromJson(json, SchemaPrototype::class.java)
 
         val menusToPrototypes = schemaPrototype.menus.associateBy({
             MenuModel(
@@ -60,7 +66,7 @@ class SchemaLoader {
                 it.style ?: MenuStyle.Full
             )
         }, {it})
-        val menus = menusToPrototypes.keys
+        val menus = ArrayList<MenuModel>(menusToPrototypes.keys)
 
         val itemsToPrototypes = schemaPrototype.items.associateBy({
             MenuItemModel(
@@ -69,7 +75,7 @@ class SchemaLoader {
                 it.icon
             )
         }, {it})
-        val items = itemsToPrototypes.keys
+        val items = ArrayList<MenuItemModel>(itemsToPrototypes.keys)
 
         val eventsToPrototypes = schemaPrototype.events.associateBy({
             EventModel(
@@ -82,7 +88,7 @@ class SchemaLoader {
 
         val initialMenu = menus.first { it.id == schemaPrototype.initialMenu }
         menus.forEach {menuModel ->
-            val itemsIds = menusToPrototypes[menuModel]?.items ?: emptyArray()
+            val itemsIds = menusToPrototypes[menuModel]?.items ?: arrayListOf()
             val itItems = items.filter { itemsIds.contains(it.id) }
             menuModel.items.addAll(itItems)
         }
@@ -103,37 +109,33 @@ class SchemaLoader {
         events.forEach eachEvent@{
             val prototype = eventsToPrototypes[it] ?: return@eachEvent
 
-            val protoAttributes = prototype.attributes ?: emptyArray()
+            val protoAttributes = prototype.attributes ?: arrayListOf()
             val attributes = attributesFrom(protoAttributes, it, report)
             it.attributes.addAll(attributes)
 
-            val protoModificators = prototype.modificators ?: emptyArray()
+            val protoModificators = prototype.modificators ?: arrayListOf()
             val modificators = modificatorsFrom(protoModificators, it, report)
             it.modificators.addAll(modificators)
         }
 
-        val schema = SchemaModel(
-            initialMenu,
-            menus.toTypedArray(),
-            items.toTypedArray()
-        )
+        val schema = SchemaModel(initialMenu, menus, items)
         return Result(schema, report)
     }
 
-    private fun attributesFrom(objects: Array<JsonObject>,
+    private fun attributesFrom(objects: ArrayList<JsonObject>,
                                event: EventModel,
                                report: SchemaLoadingReport): ArrayList<EventAttribute> {
         val attributes = ArrayList<EventAttribute>()
-        val typeKey = ParsingKeys.attributeType.value
+        val typeKey = ParsingKeys.AttributeType.value
         objects.forEach {
             try {
                 val type = it[typeKey].asString
-                val attributeClass = attributedTypeToClass[type]!!.java
-                val attribute = Gson().fromJson(it, attributeClass) as EventAttribute
+                val attributeClass = (attributedTypeToClass[type] ?: error("Unsupported attribute type")).java
+                val attribute = gson.fromJson(it, attributeClass) as EventAttribute
                 attributes.add(attribute)
             }
             catch(e: Exception) {
-                val idKey = ParsingKeys.id.value
+                val idKey = ParsingKeys.Id.value
                 if(it.has(idKey)) {
                     val id = it[idKey].asString
                     val issue = InvalidAttributeStructure(event, id)
@@ -148,16 +150,16 @@ class SchemaLoader {
         return attributes
     }
 
-    private fun modificatorsFrom(objects: Array<JsonObject>,
+    private fun modificatorsFrom(objects: ArrayList<JsonObject>,
                                  event: EventModel,
                                  report: SchemaLoadingReport): ArrayList<SessionStateModificator> {
         val modificators = ArrayList<SessionStateModificator>()
-        val typeKey = ParsingKeys.modificatorType.value
+        val typeKey = ParsingKeys.ModificatorType.value
         objects.forEach {
             try {
                 val type = it[typeKey].asString
-                val modificatorClass = modificatorTypeToClass[type]!!.java
-                val modificator = Gson().fromJson(it, modificatorClass) as SessionStateModificator
+                val modificatorClass = (modificatorTypeToClass[type] ?: error("")).java
+                val modificator = gson.fromJson(it, modificatorClass) as SessionStateModificator
                 modificators.add(modificator)
             }
             catch(e: Exception) {

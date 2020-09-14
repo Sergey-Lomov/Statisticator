@@ -12,6 +12,7 @@ class Constants {
         val INITIAL_VALUE_BUNDLE_KEY = "initialValue"
 
         val EMPTY_VALUE_STUB = "---"
+        val COLORS_LIST_ITEMS_PER_ROW = 5
         val LIST_ITEMS_PER_ROW = 5
         val MENU_ITEMS_PER_ROW = 4
 

@@ -1,4 +1,4 @@
-package com.example.statisticator
+package com.example.statisticator.ui.attributes
 
 import android.os.Bundle
 import android.view.KeyEvent
@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.statisticator.R
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.attributes.TextFieldAttribute
 import java.io.Serializable

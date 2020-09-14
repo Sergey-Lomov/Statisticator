@@ -1,4 +1,4 @@
-package com.example.statisticator
+package com.example.statisticator.ui.attributes
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.statisticator.R
 import com.example.statisticator.constants.Constants
-import com.example.statisticator.models.schema.attributes.EditableAttribute
-import com.example.statisticator.models.schema.attributes.EventAttribute
-import com.example.statisticator.models.schema.attributes.NumberIntervalAttribute
-import com.example.statisticator.models.schema.attributes.TextFieldAttribute
+import com.example.statisticator.models.schema.attributes.*
 import java.io.Serializable
 
 interface AttributeEditorDelegate: Serializable {
@@ -48,6 +46,8 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
                 this)
             is TextFieldAttribute -> TextFieldFragment.newInstance(attribute as TextFieldAttribute,
                 initialValue,
+                this)
+            is ColorsListAttribute -> ColorsListFragment.newInstance(attribute as ColorsListAttribute,
                 this)
             else -> throw Exception("Can't found value editing fragment for attribute")
         }

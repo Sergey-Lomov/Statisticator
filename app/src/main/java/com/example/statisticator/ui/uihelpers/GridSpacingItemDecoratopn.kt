@@ -1,4 +1,4 @@
-package com.example.statisticator.uihelpers
+package com.example.statisticator.ui.uihelpers
 
 import android.graphics.Rect
 import android.view.View

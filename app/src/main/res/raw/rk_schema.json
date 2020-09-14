@@ -37,16 +37,15 @@
           "maxValue": 6
         },
         {
-          "id": "players_amount2",
-          "type": "number_interval",
-          "title": "Количество игроков",
-          "minValue": 13,
-          "maxValue": 26
-        },
-        {
           "id": "players",
           "type": "text_field",
           "title": "Имена игроков"
+        },
+        {
+          "id": "players_colors",
+          "type": "colors_list",
+          "title": "Цвета игроков",
+          "colors": ["#AA4400", "#BCBCBC", "#1534FF", "#FF8833", "#FF0045", "#346734", "#124578"]
         }
       ],
       "modificators": [

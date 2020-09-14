@@ -1,4 +1,4 @@
-package com.example.statisticator
+package com.example.statisticator.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.statisticator.R
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.MenuItemModel
 import com.example.statisticator.models.schema.MenuModel
 import com.example.statisticator.models.schema.MenuStyle
 import com.example.statisticator.service.SchemasManager
-import com.example.statisticator.uihelpers.GridSpacingItemDecoration
+import com.example.statisticator.ui.uihelpers.GridSpacingItemDecoration
 
 interface MenuFragmentDelegate {
     fun itemClick(item: MenuItemModel)

@@ -30,7 +30,7 @@ class DataStoreManager {
         val logDir = File(context.filesDir.absolutePath + "/" + LOG_FOLDER + "/")
         logDir.mkdirs()
         val file = File(logDir, fileName)
-        val json = Gson().toJson(event.attributes)
+        val json = gson.toJson(event.attributes)
         file.writeText(json)
     }
 

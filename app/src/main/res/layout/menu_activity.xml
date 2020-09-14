@@ -8,8 +8,8 @@
 
     <fragment
         android:id="@+id/menu_fragment"
-        android:name="com.example.statisticator.MenuFragment"
-        class="com.example.statisticator.MenuFragment"
+        android:name="com.example.statisticator.ui.MenuFragment"
+        class="com.example.statisticator.ui.MenuFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

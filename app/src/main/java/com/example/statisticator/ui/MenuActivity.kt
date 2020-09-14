@@ -1,4 +1,4 @@
-package com.example.statisticator
+package com.example.statisticator.ui
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.statisticator.R
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.*
 import com.example.statisticator.models.schema.EventModel
