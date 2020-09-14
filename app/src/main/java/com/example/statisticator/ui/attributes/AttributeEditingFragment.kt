@@ -24,7 +24,7 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
     private var delegate: AttributeEditorDelegate? = null
     private var initialValue: Serializable? = null
     private lateinit var attribute: EditableAttribute
-    private lateinit var valueTextView: TextView
+    private lateinit var valuePresenter: ValuePresenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,10 +38,8 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
         val rootView = inflater.inflate(R.layout.attribute_fragment, container, false)
         val titleTextView = rootView.findViewById<TextView>(R.id.title)
         titleTextView.text = attribute.title
-        valueTextView = rootView.findViewById(R.id.value)
-        valueTextView.text = if (initialValue != null) initialValue!!.toString() else Constants.EMPTY_VALUE_STUB
 
-        val fragment = when (attribute) {
+        val editorLayout = when (attribute) {
             is NumberIntervalAttribute -> NumberIntervalFragment.newInstance(attribute as NumberIntervalAttribute,
                 this)
             is TextFieldAttribute -> TextFieldFragment.newInstance(attribute as TextFieldAttribute,
@@ -52,15 +50,22 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
             else -> throw Exception("Can't found value editing fragment for attribute")
         }
 
+        valuePresenter = when (attribute) {
+            is ColorsListAttribute -> ColorValuePresenter()
+            else -> StringValuePresenter()
+        }
+
         val transaction = childFragmentManager.beginTransaction()
-        transaction.add(R.id.frame_layout, fragment)
+        transaction.add(R.id.editorlayout, editorLayout)
+        transaction.add(R.id.valueLayout, valuePresenter)
+        transaction.runOnCommit { valuePresenter.setValue(initialValue) }
         transaction.commit()
 
         return rootView
     }
 
     override fun valueDidChanged(value: Serializable) {
-        valueTextView.text = value.toString()
+        valuePresenter.setValue(value)
         delegate?.attributeValueDidChanged(attribute, value)
     }
 

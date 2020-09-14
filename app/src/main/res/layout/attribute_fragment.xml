@@ -3,49 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="0dp"
+    android:layout_marginStart="0dp"
+    android:layout_marginLeft="0dp">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/attribute_content_hor_insets"
         android:layout_marginTop="@dimen/attribute_content_vert_insets"
-        android:layout_marginBottom="@dimen/attribute_value_editing_vert_insets"
-        android:fontFamily="sans-serif-black"
-        android:text="Attribute title"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/frame_layout"
-        app:layout_constraintEnd_toStartOf="@+id/value"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/value"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:layout_marginEnd="@dimen/attribute_content_hor_insets"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-black"
-        android:maxLines="1"
-        android:text="Value"
-        android:textAlignment="viewEnd"
-        android:textIsSelectable="false"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/title"
+        android:orientation="horizontal"
+        android:padding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/title"
-        app:layout_constraintTop_toTopOf="@+id/title" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="Attribute title"
+            android:textSize="18sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/attribute_content_hor_insets">
+
+            <FrameLayout
+                android:id="@+id/valueLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|end">
+
+            </FrameLayout>
+        </FrameLayout>
+
+    </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/frame_layout"
+        android:id="@+id/editorlayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/attribute_content_vert_insets"
+        android:layout_marginTop="@dimen/attribute_content_vert_insets"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
     </FrameLayout>
 

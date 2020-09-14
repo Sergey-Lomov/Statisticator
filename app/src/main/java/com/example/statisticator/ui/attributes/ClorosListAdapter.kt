@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.statisticator.R
+import com.example.statisticator.ui.uihelpers.setDrawableBackground
 
 class ColorsListAdapter(private val colors: ArrayList<Int>,
                         override var delegate: OptionsListDelegate?
@@ -25,13 +26,7 @@ class ColorsListAdapter(private val colors: ArrayList<Int>,
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val background = viewHolder.colorView.background
-        when (background) {
-            is ShapeDrawable -> background.paint?.color = colors[position]
-            is GradientDrawable -> background.setColor(colors[position])
-            is ColorDrawable -> background.color = colors[position]
-        }
-
+        viewHolder.colorView.setDrawableBackground(colors[position])
         viewHolder.itemView.setOnClickListener {
             delegate?.optionAtIndexClick(position)
         }
