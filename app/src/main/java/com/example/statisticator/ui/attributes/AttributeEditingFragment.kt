@@ -11,17 +11,23 @@ import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.attributes.*
 import java.io.Serializable
 
+interface AttributeEditor {
+    var delegate: AttributeEditorDelegate?
+}
+
 interface AttributeEditorDelegate: Serializable {
-    fun attributeValueDidChanged(attribute: EventAttribute, value: Serializable)
+    fun attributeValueDidChanged(attribute: EventAttribute,
+                                 value: Serializable,
+                                 editor: AttributeEditor)
 }
 
 interface ValueEditorDelegate: Serializable {
     fun valueDidChanged(value: Serializable)
 }
 
-class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
+class AttributeEditingFragment : Fragment(), ValueEditorDelegate, AttributeEditor {
 
-    private var delegate: AttributeEditorDelegate? = null
+    override var delegate: AttributeEditorDelegate? = null
     private var initialValue: Serializable? = null
     private lateinit var attribute: EditableAttribute
     private lateinit var valuePresenter: ValuePresenter
@@ -34,24 +40,28 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
         initialValue = arguments?.get(Constants.INITIAL_VALUE_BUNDLE_KEY) as? Serializable
         attribute = arguments?.get(Constants.ATTRIBUTE_BUNDLE_KEY) as? EditableAttribute ?:
                 throw Exception("Create attribute editing fragment with no attribute in arguments")
+        val predefinedTitle = arguments?.get(Constants.PREDEFINED_TITLE_BUNDLE_KEY) as? String
 
         val rootView = inflater.inflate(R.layout.attribute_fragment, container, false)
         val titleTextView = rootView.findViewById<TextView>(R.id.title)
-        titleTextView.text = attribute.title
+        titleTextView.text = predefinedTitle ?: attribute.title ?: ""
 
         val editorLayout = when (attribute) {
             is NumberIntervalAttribute -> NumberIntervalFragment.newInstance(attribute as NumberIntervalAttribute,
-                this)
+                delegate = this)
             is TextFieldAttribute -> TextFieldFragment.newInstance(attribute as TextFieldAttribute,
                 initialValue,
-                this)
+                delegate = this)
             is ColorsListAttribute -> ColorsListFragment.newInstance(attribute as ColorsListAttribute,
-                this)
+                delegate = this)
+            is ArrayAttribute -> ArrayEditingFragment.newInstance(attribute as ArrayAttribute,
+                delegate = this)
             else -> throw Exception("Can't found value editing fragment for attribute")
         }
 
         valuePresenter = when (attribute) {
             is ColorsListAttribute -> ColorValuePresenter()
+            is ArrayAttribute -> ArrayValuePresenter()
             else -> StringValuePresenter()
         }
 
@@ -66,17 +76,19 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate {
 
     override fun valueDidChanged(value: Serializable) {
         valuePresenter.setValue(value)
-        delegate?.attributeValueDidChanged(attribute, value)
+        delegate?.attributeValueDidChanged(attribute, value, this)
     }
 
     companion object {
         fun newInstance(attribute: EditableAttribute,
                         initialValue: Serializable? = null,
-                        delegate: AttributeEditorDelegate? = null) = AttributeEditingFragment().apply {
+                        delegate: AttributeEditorDelegate? = null,
+                        predefinedTitle: String? = null) = AttributeEditingFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(Constants.ATTRIBUTE_BUNDLE_KEY, attribute)
                 putSerializable(Constants.INITIAL_VALUE_BUNDLE_KEY, initialValue)
                 putSerializable(Constants.DELEGATE_BUNDLE_KEY, delegate)
+                putSerializable(Constants.PREDEFINED_TITLE_BUNDLE_KEY, predefinedTitle)
             }
         }
     }

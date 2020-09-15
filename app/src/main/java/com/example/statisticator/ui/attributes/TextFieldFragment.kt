@@ -28,7 +28,7 @@ class TextFieldFragment : Fragment() {
         delegate = arguments?.get(Constants.DELEGATE_BUNDLE_KEY) as? ValueEditorDelegate
         initialValue = arguments?.get(Constants.INITIAL_VALUE_BUNDLE_KEY) as? String
         attribute = arguments?.get(Constants.ATTRIBUTE_BUNDLE_KEY) as? TextFieldAttribute ?:
-                throw Exception("Create number interval fragment with no valid attribute in arguments")
+                throw Exception("Create text field fragment with no valid attribute in arguments")
 
         val rootView = inflater.inflate(R.layout.text_field_fragment, container, false)
         val textField = rootView.findViewById<EditText>(R.id.textField)

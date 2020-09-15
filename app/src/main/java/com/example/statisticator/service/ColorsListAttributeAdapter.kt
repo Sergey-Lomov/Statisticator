@@ -1,15 +1,16 @@
 package com.example.statisticator.service
 
 import android.graphics.Color
+import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.attributes.ColorsListAttribute
 import com.google.gson.*
 import java.lang.reflect.Type
 
 class ColorsListAttributeAdapter: JsonSerializer<ColorsListAttribute>, JsonDeserializer<ColorsListAttribute> {
 
-    private val ID = "id"
-    private val TITLE = "title"
-    private val COLORS = "colors"
+    private val idKey = Constants.AttributeParsingKeys.Id.value
+    private val titleKey = Constants.AttributeParsingKeys.Title.value
+    private val colorsKey = Constants.AttributeParsingKeys.Colors.value
 
     override fun serialize(
         src: ColorsListAttribute?,
@@ -25,11 +26,11 @@ class ColorsListAttributeAdapter: JsonSerializer<ColorsListAttribute>, JsonDeser
             colorsArray.add(hexCode)
         }
 
-        jsonObject.addProperty(ID, attribute.id)
-        jsonObject.addProperty(TITLE, attribute.title)
-        jsonObject.add(COLORS, colorsArray)
+        jsonObject.addProperty(idKey, attribute.id)
+        jsonObject.addProperty(titleKey, attribute.title)
+        jsonObject.add(colorsKey, colorsArray)
 
-        return jsonObject;
+        return jsonObject
     }
 
     override fun deserialize(
@@ -37,11 +38,11 @@ class ColorsListAttributeAdapter: JsonSerializer<ColorsListAttribute>, JsonDeser
         typeOfT: Type?,
         context: JsonDeserializationContext?
     ): ColorsListAttribute {
-        val jsonObject = json as? JsonObject ?: error("Error at Color List Attribute parsing")
+        val jsonObject = json as? JsonObject ?: throw AttributeParsingException("Error at Color List Attribute parsing")
 
-        val id = jsonObject[ID].asString
-        val title = jsonObject[TITLE].asString
-        val hexColors = jsonObject[COLORS].asJsonArray
+        val id = jsonObject[idKey].asString
+        val title = jsonObject[titleKey].asString
+        val hexColors = jsonObject[colorsKey].asJsonArray
         val colors = hexColors.map {Color.parseColor(it.asString)}
 
         return ColorsListAttribute(id, title, ArrayList(colors))

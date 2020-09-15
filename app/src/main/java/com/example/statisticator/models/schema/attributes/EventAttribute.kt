@@ -9,7 +9,7 @@ interface EventAttribute: Serializable {
 }
 
 interface EditableAttribute: EventAttribute {
-    val title: String
+    val title: String?
 }
 
 interface CalculatableAttribute: EventAttribute {

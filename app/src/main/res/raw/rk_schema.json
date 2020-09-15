@@ -37,9 +37,19 @@
           "maxValue": 6
         },
         {
-          "id": "players",
+          "id": "version",
           "type": "text_field",
-          "title": "Имена игроков"
+          "title": "Версия"
+        },
+        {
+          "id": "players",
+          "title": "Имена игроков",
+          "type": "array",
+          "size": 5,
+          "prototype": {
+            "id": "playersPototype",
+            "type": "text_field"
+          }
         },
         {
           "id": "players_colors",

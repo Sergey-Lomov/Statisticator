@@ -1,5 +1,6 @@
 package com.example.statisticator.service
 
+import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.attributes.EventAttribute
 import com.example.statisticator.models.schema.attributes.NumberIntervalAttribute
 import com.example.statisticator.models.schema.*
@@ -12,17 +13,6 @@ import java.lang.Exception
 
 class SchemaLoader {
 
-    private enum class ParsingKeys(val value: String) {
-        AttributeType("type"),
-        ModificatorType("type"),
-        Id("id")
-    }
-
-    private val attributedTypeToClass = mapOf(
-        "number_interval" to NumberIntervalAttribute::class,
-        "text_field" to TextFieldAttribute::class,
-        "colors_list" to ColorsListAttribute::class
-    )
     private val modificatorTypeToClass = mapOf(
         "add_addition" to AddAdditionModificator::class,
         "remove_addition" to RemoveAdditionModificator::class,
@@ -50,9 +40,7 @@ class SchemaLoader {
                                         val items: ArrayList<MenuItemPrototype>,
                                         val events: ArrayList<EventPrototype>)
 
-    private val gson = GsonBuilder()
-        .registerTypeAdapter(ColorsListAttribute::class.java, ColorsListAttributeAdapter())
-        .create()
+    private val gson = GsonBuilder().create()
 
     data class Result(val schema: SchemaModel, val report: SchemaLoadingReport)
 
@@ -122,39 +110,25 @@ class SchemaLoader {
         return Result(schema, report)
     }
 
-    private fun attributesFrom(objects: ArrayList<JsonObject>,
+    private fun attributesFrom(objects: Iterable<JsonObject>,
                                event: EventModel,
-                               report: SchemaLoadingReport): ArrayList<EventAttribute> {
-        val attributes = ArrayList<EventAttribute>()
-        val typeKey = ParsingKeys.AttributeType.value
-        objects.forEach {
-            try {
-                val type = it[typeKey].asString
-                val attributeClass = (attributedTypeToClass[type] ?: error("Unsupported attribute type")).java
-                val attribute = gson.fromJson(it, attributeClass) as EventAttribute
-                attributes.add(attribute)
-            }
-            catch(e: Exception) {
-                val idKey = ParsingKeys.Id.value
-                if(it.has(idKey)) {
-                    val id = it[idKey].asString
-                    val issue = InvalidAttributeStructure(event, id)
-                    report.issues.add(issue)
-                } else {
-                    val issue = AttributeWithoutId(event)
-                    report.issues.add(issue)
-                }
-            }
+                               report: SchemaLoadingReport): Iterable<EventAttribute> {
+        try {
+            return AttributesFactory().attributesFromJson(objects)
         }
-
-        return attributes
+        catch(e: AttributeParsingException) {
+            val issue = if (e.attributeId != null) InvalidAttributeStructure(event, e.attributeId!!)
+                else  AttributeWithoutId(event)
+            report.issues.add(issue)
+        }
+        return emptyList()
     }
 
     private fun modificatorsFrom(objects: ArrayList<JsonObject>,
                                  event: EventModel,
                                  report: SchemaLoadingReport): ArrayList<SessionStateModificator> {
         val modificators = ArrayList<SessionStateModificator>()
-        val typeKey = ParsingKeys.ModificatorType.value
+        val typeKey = Constants.ModificatorParsingKeys.Type.value
         objects.forEach {
             try {
                 val type = it[typeKey].asString

@@ -4,6 +4,6 @@ import com.google.gson.JsonObject
 
 data class ColorsListAttribute (
     override val id: String,
-    override val title: String,
+    override val title: String?,
     val colors: ArrayList<Int>
 ): EditableAttribute

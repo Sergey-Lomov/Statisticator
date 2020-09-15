@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.statisticator.R
 
-
-class StringValuePresenter : ValuePresenter() {
+open class StringValuePresenter : ValuePresenter() {
 
     private lateinit var textView: TextView
 
@@ -22,6 +21,10 @@ class StringValuePresenter : ValuePresenter() {
     }
 
     override fun setValue(value: Any?) {
-        textView.text = value?.toString() ?: ""
+        textView.text = stringForValue(value)
+    }
+
+    open fun stringForValue(value: Any?): String {
+        return value?.toString() ?: ""
     }
 }

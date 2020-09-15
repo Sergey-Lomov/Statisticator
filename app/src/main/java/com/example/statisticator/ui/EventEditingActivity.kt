@@ -15,6 +15,7 @@ import com.example.statisticator.models.schema.attributes.EditableAttribute
 import com.example.statisticator.models.schema.attributes.EventAttribute
 import com.example.statisticator.service.EventProcessor
 import com.example.statisticator.ui.attributes.AttributeEditingFragment
+import com.example.statisticator.ui.attributes.AttributeEditor
 import com.example.statisticator.ui.attributes.AttributeEditorDelegate
 import java.io.Serializable
 
@@ -26,7 +27,8 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.event_editing_activity)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        requestedOrientation =
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         if (savedInstanceState == null) {
             event = intent.extras?.get(Constants.EVENT_EXTRAS_KEY) as? Event ?:
@@ -49,7 +51,7 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
 
         val transaction = supportFragmentManager.beginTransaction()
         fragments.forEach() {
-            transaction.add(R.id.linear_layout, it)
+            transaction.add(R.id.linearLayout, it)
         }
         transaction.runOnCommit {
             addSaveButton()
@@ -61,7 +63,7 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
         val saveView = LayoutInflater.from(this).inflate(R.layout.save_button_item, null, false)
         val saveButton = saveView.findViewById<Button>(R.id.saveButton)
         saveButton.setOnClickListener { saveEvent() }
-        val layout = findViewById<LinearLayout>(R.id.linear_layout)
+        val layout = findViewById<LinearLayout>(R.id.linearLayout)
         layout.addView(saveView)
     }
 
@@ -70,7 +72,7 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
         finish()
     }
 
-    override fun attributeValueDidChanged(attribute: EventAttribute, value: Serializable) {
+    override fun attributeValueDidChanged(attribute: EventAttribute, value: Serializable, editor: AttributeEditor) {
         event.attributes[attribute.id] = value
     }
 }
