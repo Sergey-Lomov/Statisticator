@@ -12,17 +12,19 @@ class AttributeParsingException(message:String, var attributeId: String? = null)
 class AttributesFactory {
 
     private val idKey = Constants.AttributeParsingKeys.Id.value
+    private val typeKey = Constants.AttributeParsingKeys.Type.value
 
     private val attributedTypeToClass = mapOf(
-        "number_interval" to NumberIntervalAttribute::class,
-        "text_field" to TextFieldAttribute::class,
-        "colors_list" to ColorsListAttribute::class,
-        "array" to ArrayAttribute::class
+        Constants.AttributeType.NumberInterval.value to NumberIntervalAttribute::class,
+        Constants.AttributeType.TextField.value to TextFieldAttribute::class,
+        Constants.AttributeType.ColorsList.value to ColorsListAttribute::class,
+        Constants.AttributeType.StaticArray.value to ArrayAttribute::class,
+        Constants.AttributeType.DynamicArray.value to ArrayAttribute::class
     )
 
     fun attributeFromJson(jsonObject: JsonObject): EventAttribute {
         try {
-            val type = jsonObject[Constants.AttributeParsingKeys.Type.value].asString
+            val type = jsonObject[typeKey].asString
             val attributeClass =
                 (attributedTypeToClass[type] ?: error("Unsupported attribute type")).java
             return gson.fromJson(jsonObject, attributeClass) as EventAttribute

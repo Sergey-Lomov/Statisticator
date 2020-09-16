@@ -2,9 +2,7 @@ package com.example.statisticator.service
 
 import android.graphics.Color
 import com.example.statisticator.constants.Constants
-import com.example.statisticator.models.schema.attributes.ArrayAttribute
-import com.example.statisticator.models.schema.attributes.ColorsListAttribute
-import com.example.statisticator.models.schema.attributes.EditableAttribute
+import com.example.statisticator.models.schema.attributes.*
 import com.google.gson.*
 import java.lang.reflect.Type
 
@@ -12,8 +10,13 @@ class ArrayAttributeAdapter: JsonSerializer<ArrayAttribute>, JsonDeserializer<Ar
 
     private val idKey = Constants.AttributeParsingKeys.Id.value
     private val titleKey = Constants.AttributeParsingKeys.Title.value
+    private val typeKey = Constants.AttributeParsingKeys.Type.value
     private val sizeKey = Constants.AttributeParsingKeys.Size.value
+    private val sizeVarKey = Constants.AttributeParsingKeys.SizeVar.value
     private val prototypeKey = Constants.AttributeParsingKeys.Prototype.value
+
+    private val staticType = Constants.AttributeType.StaticArray.value
+    private val dynamicType = Constants.AttributeType.DynamicArray.value
 
     override fun serialize(
         src: ArrayAttribute?,
@@ -28,6 +31,11 @@ class ArrayAttributeAdapter: JsonSerializer<ArrayAttribute>, JsonDeserializer<Ar
         jsonObject.addProperty(titleKey, attribute.title)
         jsonObject.add(prototypeKey, prototypeObject)
 
+        when (attribute) {
+            is StaticArrayAttribute -> jsonObject.addProperty(sizeKey, attribute.size)
+            is DynamicArrayAttribute ->  jsonObject.addProperty(sizeVarKey, attribute.sizeVar)
+        }
+
         return jsonObject
     }
 
@@ -39,12 +47,22 @@ class ArrayAttributeAdapter: JsonSerializer<ArrayAttribute>, JsonDeserializer<Ar
         val jsonObject = json as? JsonObject ?: throw AttributeParsingException("Error at Array Attribute parsing")
 
         val id = jsonObject[idKey].asString
-        val title = jsonObject[titleKey].asString
-        val size = jsonObject[sizeKey].asInt
+        val type = jsonObject[typeKey].asString
+        val title = if (jsonObject.has(titleKey)) jsonObject[titleKey].asString else null
         val prototypeObject = jsonObject[prototypeKey].asJsonObject
         val prototype = AttributesFactory().attributeFromJson(prototypeObject) as? EditableAttribute
             ?: throw AttributeParsingException("Not editable attribute used as prototype in array attribute", id)
 
-        return ArrayAttribute(id, title, size, prototype)
+        return when (type) {
+            staticType -> {
+                val size = jsonObject[sizeKey].asInt
+                StaticArrayAttribute(id, title, size, prototype)
+            }
+            dynamicType -> {
+                val sizeVar = jsonObject[sizeVarKey].asString
+                DynamicArrayAttribute(id, title, sizeVar, prototype)
+            }
+            else -> throw AttributeParsingException("Unsupported type of array attribute", id)
+        }
     }
 }

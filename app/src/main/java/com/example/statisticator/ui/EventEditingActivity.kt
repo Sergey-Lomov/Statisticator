@@ -1,5 +1,6 @@
 package com.example.statisticator.ui
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,8 +28,7 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.event_editing_activity)
-        requestedOrientation =
-            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         if (savedInstanceState == null) {
             event = intent.extras?.get(Constants.EVENT_EXTRAS_KEY) as? Event ?:
@@ -45,7 +45,7 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
         val fragments: MutableList<Fragment> = mutableListOf()
         val editable = event.model.attributes.filterIsInstance<EditableAttribute>()
         editable.forEach() {
-            val fragment = AttributeEditingFragment.newInstance(it, event.attributes[it.id],this)
+            val fragment = AttributeEditingFragment.newInstance(it, state, event.attributes[it.id],this)
             fragments.add(fragment)
         }
 
@@ -69,6 +69,9 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
 
     private fun saveEvent() {
         EventProcessor().saveEvent(event, state, this)
+        val resultIntent = Intent()
+        resultIntent.putExtra(Constants.SESSION_STATE_EXTRAS_KEY, state)
+        setResult(Constants.EVENT_EDITING_OK, resultIntent)
         finish()
     }
 

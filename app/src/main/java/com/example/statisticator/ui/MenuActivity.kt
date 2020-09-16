@@ -63,6 +63,15 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Constants.EVENT_EDITING_OK) {
+            val newState = data?.extras?.get(Constants.SESSION_STATE_EXTRAS_KEY) as? SessionState
+            sessionState = newState ?: sessionState
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     private fun showMenu(model: MenuModel) {
         val intent = Intent(this@MenuActivity, MenuActivity::class.java)
         intent.putExtra(Constants.MENU_EXTRAS_KEY, model)
@@ -78,6 +87,6 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
         intent.putExtra(Constants.EVENT_EXTRAS_KEY, event)
         intent.putExtra(Constants.SESSION_STATE_EXTRAS_KEY, sessionState)
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        startActivity(intent)
+        startActivityForResult(intent, Constants.EVENT_EDITING_REQUEST_CODE)
     }
 }

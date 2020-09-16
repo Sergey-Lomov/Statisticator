@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.statisticator.R
 import com.example.statisticator.constants.Constants
+import com.example.statisticator.models.SessionState
 import com.example.statisticator.models.schema.attributes.*
 import java.io.Serializable
 
@@ -29,6 +30,7 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate, AttributeEdito
 
     override var delegate: AttributeEditorDelegate? = null
     private var initialValue: Serializable? = null
+    private lateinit var state: SessionState
     private lateinit var attribute: EditableAttribute
     private lateinit var valuePresenter: ValuePresenter
 
@@ -38,8 +40,10 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate, AttributeEdito
     ): View? {
         delegate = arguments?.get(Constants.DELEGATE_BUNDLE_KEY) as? AttributeEditorDelegate
         initialValue = arguments?.get(Constants.INITIAL_VALUE_BUNDLE_KEY) as? Serializable
-        attribute = arguments?.get(Constants.ATTRIBUTE_BUNDLE_KEY) as? EditableAttribute ?:
-                throw Exception("Create attribute editing fragment with no attribute in arguments")
+        state = arguments?.get(Constants.SESSION_STATE_BUNDLE_KEY) as? SessionState
+            ?: throw Exception("Create attribute editing fragment with no session state in arguments")
+        attribute = arguments?.get(Constants.ATTRIBUTE_BUNDLE_KEY) as? EditableAttribute
+            ?: throw Exception("Create attribute editing fragment with no attribute in arguments")
         val predefinedTitle = arguments?.get(Constants.PREDEFINED_TITLE_BUNDLE_KEY) as? String
 
         val rootView = inflater.inflate(R.layout.attribute_fragment, container, false)
@@ -55,6 +59,7 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate, AttributeEdito
             is ColorsListAttribute -> ColorsListFragment.newInstance(attribute as ColorsListAttribute,
                 delegate = this)
             is ArrayAttribute -> ArrayEditingFragment.newInstance(attribute as ArrayAttribute,
+                sessionState = state,
                 delegate = this)
             else -> throw Exception("Can't found value editing fragment for attribute")
         }
@@ -81,11 +86,13 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate, AttributeEdito
 
     companion object {
         fun newInstance(attribute: EditableAttribute,
+                        sessionState: SessionState,
                         initialValue: Serializable? = null,
                         delegate: AttributeEditorDelegate? = null,
                         predefinedTitle: String? = null) = AttributeEditingFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(Constants.ATTRIBUTE_BUNDLE_KEY, attribute)
+                putSerializable(Constants.SESSION_STATE_BUNDLE_KEY, sessionState)
                 putSerializable(Constants.INITIAL_VALUE_BUNDLE_KEY, initialValue)
                 putSerializable(Constants.DELEGATE_BUNDLE_KEY, delegate)
                 putSerializable(Constants.PREDEFINED_TITLE_BUNDLE_KEY, predefinedTitle)

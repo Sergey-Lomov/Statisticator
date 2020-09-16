@@ -41,7 +41,7 @@ class ColorsListAttributeAdapter: JsonSerializer<ColorsListAttribute>, JsonDeser
         val jsonObject = json as? JsonObject ?: throw AttributeParsingException("Error at Color List Attribute parsing")
 
         val id = jsonObject[idKey].asString
-        val title = jsonObject[titleKey].asString
+        val title = if (jsonObject.has(titleKey)) jsonObject[titleKey].asString else null
         val hexColors = jsonObject[colorsKey].asJsonArray
         val colors = hexColors.map {Color.parseColor(it.asString)}
 

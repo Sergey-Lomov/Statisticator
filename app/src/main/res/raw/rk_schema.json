@@ -4,7 +4,7 @@
   "menus" : [
     {
       "id": "start",
-      "items" : ["start_game", "mining"],
+      "items" : ["start_game", "players_registration", "mining"],
       "style": "full"
     }
   ],
@@ -14,6 +14,12 @@
       "title": "Начать игру",
       "type": "event",
       "target": "start_game"
+    },
+    {
+      "id": "players_registration",
+      "title": "Регистрация игроков",
+      "type": "event",
+      "target": "players_registration"
     },
     {
       "id": "mining",
@@ -40,22 +46,6 @@
           "id": "version",
           "type": "text_field",
           "title": "Версия"
-        },
-        {
-          "id": "players",
-          "title": "Имена игроков",
-          "type": "array",
-          "size": 5,
-          "prototype": {
-            "id": "playersPototype",
-            "type": "text_field"
-          }
-        },
-        {
-          "id": "players_colors",
-          "type": "colors_list",
-          "title": "Цвета игроков",
-          "colors": ["#AA4400", "#BCBCBC", "#1534FF", "#FF8833", "#FF0045", "#346734", "#124578"]
         }
       ],
       "modificators": [
@@ -63,7 +53,48 @@
           "type": "add_addition",
           "attribute": "game_id",
           "valueKey": "id"
+        },
+        {
+          "type": "set_var",
+          "variable": "players_amount",
+          "valueKey": "players_amount"
         }
+      ]
+    },
+    {
+      "id": "players_registration",
+      "type": "players_registration",
+      "title": "Регистрация игроков",
+      "attributes": [
+        {
+          "id": "players",
+          "title": "Имена игроков",
+          "type": "dynamic_array",
+          "sizeVar": "players_amount",
+          "prototype": {
+            "id": "playersPototype",
+            "type": "text_field"
+          }
+        }/*,
+        {
+          "id": "players",
+          "type": "static_array",
+          "title": "Цвета игроков",
+          "size": 3,
+          "prototype": {
+            "id": "players_colors",
+            "type": "colors_list",
+            "colors": [
+              "#AA4400",
+              "#BCBCBC",
+              "#1534FF",
+              "#FF8833",
+              "#FF0045",
+              "#346734",
+              "#124578"
+            ]
+          }
+        }*/
       ]
     },
     {
