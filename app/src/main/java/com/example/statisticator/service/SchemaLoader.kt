@@ -2,24 +2,19 @@ package com.example.statisticator.service
 
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.attributes.EventAttribute
-import com.example.statisticator.models.schema.attributes.NumberIntervalAttribute
 import com.example.statisticator.models.schema.*
-import com.example.statisticator.models.schema.attributes.ColorsListAttribute
-import com.example.statisticator.models.schema.attributes.TextFieldAttribute
 import com.example.statisticator.models.schema.modificators.*
+import com.example.statisticator.service.factories.*
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import java.io.Serializable
 import java.lang.Exception
 
 class SchemaLoader {
 
-    private val modificatorTypeToClass = mapOf(
-        "add_addition" to AddAdditionModificator::class,
-        "remove_addition" to RemoveAdditionModificator::class,
-        "clear_additions" to ClearAdditionsModificator::class,
-        "set_var" to SetVarModificator::class,
-        "remove_var" to RemoveVarModificator::class,
-        "clear_vars" to ClearVarsModificator::class)
+    private val classNameToFactory = mapOf (
+        EventAttribute::class.simpleName to AttributesFactory()
+    )
 
     private data class EventPrototype(val id: String,
                                       val type: String,
@@ -98,11 +93,11 @@ class SchemaLoader {
             val prototype = eventsToPrototypes[it] ?: return@eachEvent
 
             val protoAttributes = prototype.attributes ?: arrayListOf()
-            val attributes = attributesFrom(protoAttributes, it, report)
+            val attributes = entitiesFrom(protoAttributes, AttributesFactory(), it, report)
             it.attributes.addAll(attributes)
 
             val protoModificators = prototype.modificators ?: arrayListOf()
-            val modificators = modificatorsFrom(protoModificators, it, report)
+            val modificators = entitiesFrom(protoModificators, ModificatorsFactory(), it, report)
             it.modificators.addAll(modificators)
         }
 
@@ -110,38 +105,22 @@ class SchemaLoader {
         return Result(schema, report)
     }
 
-    private fun attributesFrom(objects: Iterable<JsonObject>,
-                               event: EventModel,
-                               report: SchemaLoadingReport): Iterable<EventAttribute> {
+    private fun <T : Serializable>entitiesFrom(objects: Iterable<JsonObject>,
+                                               factory: TypedEntitiesFactory<T>,
+                                               event: EventModel,
+                                               report: SchemaLoadingReport): Iterable<T> {
         try {
-            return AttributesFactory().attributesFromJson(objects)
+            return factory.attributesFromJson(objects)
         }
-        catch(e: AttributeParsingException) {
-            val issue = if (e.attributeId != null) InvalidAttributeStructure(event, e.attributeId!!)
-                else  AttributeWithoutId(event)
-            report.issues.add(issue)
+        catch(e: MissedEntityTypeException) {
+            report.issues.add(EntityWithoutType(event, e.json))
+        }
+        catch(e: UnsupportedEntityTypeException) {
+            report.issues.add(UnsupportedEntityType(event, e.json))
+        }
+        catch(e: InvalidEntityStructureException) {
+            report.issues.add(InvalidEntityStructure(event, e.message, e.json))
         }
         return emptyList()
-    }
-
-    private fun modificatorsFrom(objects: ArrayList<JsonObject>,
-                                 event: EventModel,
-                                 report: SchemaLoadingReport): ArrayList<SessionStateModificator> {
-        val modificators = ArrayList<SessionStateModificator>()
-        val typeKey = Constants.ModificatorParsingKeys.Type.value
-        objects.forEach {
-            try {
-                val type = it[typeKey].asString
-                val modificatorClass = (modificatorTypeToClass[type] ?: error("")).java
-                val modificator = gson.fromJson(it, modificatorClass) as SessionStateModificator
-                modificators.add(modificator)
-            }
-            catch(e: Exception) {
-                val issue = InvalidModificatorStructure(event)
-                report.issues.add(issue)
-            }
-        }
-
-        return modificators
     }
 }

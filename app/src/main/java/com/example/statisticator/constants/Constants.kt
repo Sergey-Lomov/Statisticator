@@ -4,8 +4,12 @@ import com.example.statisticator.models.schema.attributes.*
 
 class Constants {
 
-    enum class AttributeParsingKeys(val value: String) {
+    enum class UniversalParsingKeys(val value: String) {
         Type("type"),
+    }
+
+    enum class AttributeParsingKeys(val value: String) {
+        Type(UniversalParsingKeys.Type.value),
         Title("title"),
         Id("id"),
 
@@ -16,7 +20,7 @@ class Constants {
     }
 
     enum class ModificatorParsingKeys(val value: String) {
-        Type("type"),
+        Type(UniversalParsingKeys.Type.value),
     }
 
     enum class AttributeType(val value: String) {
@@ -29,7 +33,7 @@ class Constants {
 
     enum class EventParsingKeys(val value: String) {
         Id("id"),
-        Type("type"),
+        Type(UniversalParsingKeys.Type.value),
         Timestamp("timestamp")
     }
 

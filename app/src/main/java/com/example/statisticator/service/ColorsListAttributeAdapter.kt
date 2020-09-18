@@ -3,6 +3,7 @@ package com.example.statisticator.service
 import android.graphics.Color
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.attributes.ColorsListAttribute
+import com.example.statisticator.service.factories.AttributeParsingException
 import com.google.gson.*
 import java.lang.reflect.Type
 

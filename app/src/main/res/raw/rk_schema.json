@@ -67,34 +67,26 @@
       "title": "Регистрация игроков",
       "attributes": [
         {
-          "id": "players",
+          "id": "players_names",
           "title": "Имена игроков",
           "type": "dynamic_array",
           "sizeVar": "players_amount",
           "prototype": {
-            "id": "playersPototype",
+            "id": "players_names_prototype",
             "type": "text_field"
           }
-        }/*,
+        },
         {
-          "id": "players",
-          "type": "static_array",
+          "id": "players_colors",
+          "type": "dynamic_array",
           "title": "Цвета игроков",
-          "size": 3,
+          "sizeVar": "players_amount",
           "prototype": {
             "id": "players_colors",
             "type": "colors_list",
-            "colors": [
-              "#AA4400",
-              "#BCBCBC",
-              "#1534FF",
-              "#FF8833",
-              "#FF0045",
-              "#346734",
-              "#124578"
-            ]
+            "colors": ["#AA4400", "#BCBCBC", "#1534FF", "#FF8833", "#FF0045", "#346734", "#124578"]
           }
-        }*/
+        }
       ]
     },
     {
@@ -108,8 +100,33 @@
           "title": "Радиус добычи",
           "minValue": 0,
           "maxValue": 4
+        },
+        {
+          "id": "bonus",
+          "type": "number_interval",
+          "title": "Бонус добычи",
+          "minValue": 0,
+          "maxValue": 5
+        },
+        {
+          "id": "module_collector",
+          "type": "number_interval",
+          "title": "Модуль \"Коллектор\"",
+          "minValue": 0,
+          "maxValue": 25
         }
       ]
+    }
+  ],
+  "querys": [
+    {
+      "filter": {
+        "type": "==",
+        "key": "type",
+        "value": "mining"
+      },
+      "group": [],
+      "select": []
     }
   ]
 }

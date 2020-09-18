@@ -1,8 +1,9 @@
 package com.example.statisticator.service
 
-import android.graphics.Color
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.attributes.*
+import com.example.statisticator.service.factories.AttributeParsingException
+import com.example.statisticator.service.factories.AttributesFactory
 import com.google.gson.*
 import java.lang.reflect.Type
 
@@ -26,7 +27,7 @@ class ArrayAttributeAdapter: JsonSerializer<ArrayAttribute>, JsonDeserializer<Ar
         val jsonObject = JsonObject()
         val attribute = src ?: return jsonObject
 
-        val prototypeObject = AttributesFactory().jsonFromAttribute(attribute.prototype)
+        val prototypeObject = AttributesFactory().jsonFromEntity(attribute.prototype)
         jsonObject.addProperty(idKey, attribute.id)
         jsonObject.addProperty(titleKey, attribute.title)
         jsonObject.add(prototypeKey, prototypeObject)
@@ -50,7 +51,7 @@ class ArrayAttributeAdapter: JsonSerializer<ArrayAttribute>, JsonDeserializer<Ar
         val type = jsonObject[typeKey].asString
         val title = if (jsonObject.has(titleKey)) jsonObject[titleKey].asString else null
         val prototypeObject = jsonObject[prototypeKey].asJsonObject
-        val prototype = AttributesFactory().attributeFromJson(prototypeObject) as? EditableAttribute
+        val prototype = AttributesFactory().entityFromJson(prototypeObject) as? EditableAttribute
             ?: throw AttributeParsingException("Not editable attribute used as prototype in array attribute", id)
 
         return when (type) {
