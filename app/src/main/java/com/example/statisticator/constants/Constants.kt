@@ -27,6 +27,12 @@ class Constants {
         DynamicArray("dynamic_array")
     }
 
+    enum class EventParsingKeys(val value: String) {
+        Id("id"),
+        Type("type"),
+        Timestamp("timestamp")
+    }
+
     companion object {
 
         const val EVENT_EDITING_REQUEST_CODE = 1
@@ -45,9 +51,5 @@ class Constants {
         const val COLORS_LIST_ITEMS_PER_ROW = 5
         const val LIST_ITEMS_PER_ROW = 5
         const val MENU_ITEMS_PER_ROW = 4
-
-        const val EVENT_ID_KEY = "id"
-        const val EVENT_TYPE_KEY = "type"
-        const val EVENT_TIMESTAMP_KEY = "timestamp"
     }
 }

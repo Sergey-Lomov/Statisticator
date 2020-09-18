@@ -4,6 +4,11 @@ import java.io.Serializable
 
 class SessionState: Serializable {
 
-    val variables: MutableMap<String, Serializable> = mutableMapOf()
-    val additions: MutableMap<String, Serializable> = mutableMapOf()
+    val variables: MutableMap<String, Serializable>
+        get() = variablesContainer.values
+    private val variablesContainer = AttributesContainer()
+
+    val additions: MutableMap<String, Serializable>
+        get() = additionsContainer.values
+    private val additionsContainer = AttributesContainer()
 }
