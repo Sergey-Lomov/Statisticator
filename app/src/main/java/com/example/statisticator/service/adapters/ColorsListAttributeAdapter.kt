@@ -1,4 +1,4 @@
-package com.example.statisticator.service
+package com.example.statisticator.service.adapters
 
 import android.graphics.Color
 import com.example.statisticator.constants.Constants

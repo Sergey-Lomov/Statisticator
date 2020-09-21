@@ -10,6 +10,10 @@ class MissedEntityTypeException(val json: String): Exception("Missed entity type
 class UnsupportedEntityTypeException(val json: String): Exception("Unsupported entity type")
 class InvalidEntityStructureException(val error: String?, val json: String): Exception("Invalid entity structure")
 
+interface TypedEntitiesOwner: Serializable {
+    val id: String
+}
+
 abstract class TypedEntitiesFactory<T: Serializable> {
 
     private val typeKey = Constants.UniversalParsingKeys.Type.value

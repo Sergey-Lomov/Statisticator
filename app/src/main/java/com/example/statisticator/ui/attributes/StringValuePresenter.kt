@@ -16,7 +16,7 @@ open class StringValuePresenter : ValuePresenter() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.string_presenter, container, false)
-        textView = rootView.findViewById(R.id.textView)
+        textView = rootView.findViewById(R.id.title)
         return rootView
     }
 

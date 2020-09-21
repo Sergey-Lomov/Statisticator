@@ -7,4 +7,9 @@
         android:orderInCategory="100"
         android:title="@string/action_schemas"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_analyse"
+        android:orderInCategory="99"
+        android:title="@string/action_analyse"
+        app:showAsAction="never" />
 </menu>

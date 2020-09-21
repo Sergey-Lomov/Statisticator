@@ -4,14 +4,13 @@ import android.content.Context
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.AttributesContainer
 import com.example.statisticator.models.Event
-import com.example.statisticator.models.SessionState
+import com.example.statisticator.models.LoggingState
 import com.example.statisticator.models.schema.EventModel
 import com.example.statisticator.models.schema.SchemaModel
+import com.example.statisticator.service.adapters.AttributesContainerAdapter
 import com.google.gson.GsonBuilder
 import java.io.File
 import java.io.FileReader
-import java.io.Serializable
-import java.util.*
 
 
 class DataStoreManager {
@@ -46,15 +45,15 @@ class DataStoreManager {
         file.writeText(json)
     }
 
-    fun saveSessionState(state: SessionState) {
+    fun saveSessionState(state: LoggingState) {
         val json = gson.toJson(state)
         stateFile.writeText(json)
     }
 
-    fun loadSessionState(): SessionState {
+    fun loadSessionState(): LoggingState {
         if (!stateFile.exists())
-            return SessionState()
-        return gson.fromJson(FileReader(stateFile), SessionState::class.java)
+            return LoggingState()
+        return gson.fromJson(FileReader(stateFile), LoggingState::class.java)
     }
 
     fun loadEventsForSchema(schema: SchemaModel): List<Event> {

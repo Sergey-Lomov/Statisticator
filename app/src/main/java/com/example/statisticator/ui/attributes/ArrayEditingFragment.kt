@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.example.statisticator.R
 import com.example.statisticator.constants.Constants
-import com.example.statisticator.models.SessionState
+import com.example.statisticator.models.LoggingState
 import com.example.statisticator.models.schema.attributes.*
 import java.io.Serializable
 
@@ -27,7 +26,7 @@ class ArrayEditingFragment : Fragment(), AttributeEditorDelegate {
     ): View? {
         delegate = arguments?.get(Constants.DELEGATE_BUNDLE_KEY) as? ValueEditorDelegate
         initialValue = arguments?.get(Constants.INITIAL_VALUE_BUNDLE_KEY) as? Array<Serializable>
-        val state = arguments?.get(Constants.SESSION_STATE_BUNDLE_KEY) as? SessionState
+        val state = arguments?.get(Constants.SESSION_STATE_BUNDLE_KEY) as? LoggingState
             ?: throw Exception("Create array editing fragment with no session state in arguments")
         attribute = arguments?.get(Constants.ATTRIBUTE_BUNDLE_KEY) as? ArrayAttribute
             ?: throw Exception("Create array editing fragment with no valid attribute in arguments")
@@ -47,7 +46,7 @@ class ArrayEditingFragment : Fragment(), AttributeEditorDelegate {
         val rootView = inflater.inflate(R.layout.array_editing_fragment, container, false)
         editors = (0 until size).map {
             AttributeEditingFragment.newInstance(attribute.prototype,
-                sessionState = state,
+                state = state,
                 initialValue = initialValue?.get(it),
                 delegate = this,
                 predefinedTitle = (it + 1).toString())
@@ -62,7 +61,7 @@ class ArrayEditingFragment : Fragment(), AttributeEditorDelegate {
         return rootView
     }
 
-    override fun attributeValueDidChanged(attribute: EventAttribute,
+    override fun attributeValueDidChanged(attribute: Attribute,
                                           value: Serializable,
                                           editor: AttributeEditor) {
         val index = editors.indexOf(editor)
@@ -76,12 +75,12 @@ class ArrayEditingFragment : Fragment(), AttributeEditorDelegate {
 
     companion object {
         fun newInstance(attribute: EditableAttribute,
-                        sessionState: SessionState,
+                        state: LoggingState,
                         initialValue: Serializable? = null,
                         delegate: ValueEditorDelegate? = null) = ArrayEditingFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(Constants.ATTRIBUTE_BUNDLE_KEY, attribute)
-                putSerializable(Constants.SESSION_STATE_BUNDLE_KEY, sessionState)
+                putSerializable(Constants.SESSION_STATE_BUNDLE_KEY, state)
                 putSerializable(Constants.INITIAL_VALUE_BUNDLE_KEY, initialValue)
                 putSerializable(Constants.DELEGATE_BUNDLE_KEY, delegate)
             }

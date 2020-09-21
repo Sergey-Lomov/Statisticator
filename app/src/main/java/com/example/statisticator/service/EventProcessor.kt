@@ -2,12 +2,12 @@ package com.example.statisticator.service
 
 import android.content.Context
 import com.example.statisticator.models.Event
-import com.example.statisticator.models.SessionState
+import com.example.statisticator.models.LoggingState
 import com.example.statisticator.models.schema.attributes.CalculatableAttribute
 
 class EventProcessor {
 
-    fun saveEvent(event: Event, state: SessionState, context: Context) {
+    fun saveEvent(event: Event, state: LoggingState, context: Context) {
         val calculatable = event.model.attributes.filterIsInstance<CalculatableAttribute>()
         calculatable.forEach each@{
             val value = it.calculateFor(event, state) ?: return@each

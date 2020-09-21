@@ -1,19 +1,16 @@
 package com.example.statisticator.service
 
-import com.example.statisticator.constants.Constants
-import com.example.statisticator.models.schema.attributes.EventAttribute
+import com.example.statisticator.models.schema.attributes.Attribute
 import com.example.statisticator.models.schema.*
-import com.example.statisticator.models.schema.modificators.*
 import com.example.statisticator.service.factories.*
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import java.io.Serializable
-import java.lang.Exception
 
 class SchemaLoader {
 
     private val classNameToFactory = mapOf (
-        EventAttribute::class.simpleName to AttributesFactory()
+        Attribute::class.simpleName to AttributesFactory()
     )
 
     private data class EventPrototype(val id: String,
@@ -29,11 +26,18 @@ class SchemaLoader {
     private data class MenuPrototype(val id: String,
                                      val style: MenuStyle?,
                                      val items: ArrayList<String>)
+    private data class RequestPrototype(val id: String,
+                                        val title: String,
+                                        val query: String)
+    private data class QueryPrototype(val id: String,
+                                      val attributes: ArrayList<JsonObject>?)
     private data class SchemaPrototype (val title: String,
                                         val initialMenu: String,
                                         val menus: ArrayList<MenuPrototype>,
                                         val items: ArrayList<MenuItemPrototype>,
-                                        val events: ArrayList<EventPrototype>)
+                                        val events: ArrayList<EventPrototype>,
+                                        val requests: ArrayList<RequestPrototype>,
+                                        val queries: ArrayList<QueryPrototype>)
 
     private val gson = GsonBuilder().create()
 
@@ -69,6 +73,16 @@ class SchemaLoader {
         }, {it})
         val events = eventsToPrototypes.keys
 
+        val queriesToPrototypes = schemaPrototype.queries.associateBy({
+            Query(it.id)
+        }, {it})
+        val queries = queriesToPrototypes.keys
+
+        val requests = schemaPrototype.requests.mapNotNull each@{ requestPrototype ->
+            val query = queries.firstOrNull() { it.id == requestPrototype.query } ?: return@each null
+            DataRequest(requestPrototype.id, requestPrototype.title, query)
+        }
+
         val initialMenu = menus.first { it.id == schemaPrototype.initialMenu }
         menus.forEach {menuModel ->
             val itemsIds = menusToPrototypes[menuModel]?.items ?: arrayListOf()
@@ -101,25 +115,33 @@ class SchemaLoader {
             it.modificators.addAll(modificators)
         }
 
-        val schema = SchemaModel(initialMenu, menus, items)
+        queries.forEach eachQuery@{
+            val prototype = queriesToPrototypes[it] ?: return@eachQuery
+
+            val protoAttributes = prototype.attributes ?: arrayListOf()
+            val attributes = entitiesFrom(protoAttributes, AttributesFactory(), it, report)
+            it.attributes.addAll(attributes)
+        }
+
+        val schema = SchemaModel(initialMenu, menus, items, ArrayList(requests))
         return Result(schema, report)
     }
 
     private fun <T : Serializable>entitiesFrom(objects: Iterable<JsonObject>,
                                                factory: TypedEntitiesFactory<T>,
-                                               event: EventModel,
+                                               owner: TypedEntitiesOwner,
                                                report: SchemaLoadingReport): Iterable<T> {
         try {
             return factory.attributesFromJson(objects)
         }
         catch(e: MissedEntityTypeException) {
-            report.issues.add(EntityWithoutType(event, e.json))
+            report.issues.add(EntityWithoutType(owner, e.json))
         }
         catch(e: UnsupportedEntityTypeException) {
-            report.issues.add(UnsupportedEntityType(event, e.json))
+            report.issues.add(UnsupportedEntityType(owner, e.json))
         }
         catch(e: InvalidEntityStructureException) {
-            report.issues.add(InvalidEntityStructure(event, e.message, e.json))
+            report.issues.add(InvalidEntityStructure(owner, e.message, e.json))
         }
         return emptyList()
     }

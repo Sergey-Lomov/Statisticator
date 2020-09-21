@@ -11,9 +11,9 @@ import androidx.fragment.app.Fragment
 import com.example.statisticator.R
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.Event
-import com.example.statisticator.models.SessionState
+import com.example.statisticator.models.LoggingState
 import com.example.statisticator.models.schema.attributes.EditableAttribute
-import com.example.statisticator.models.schema.attributes.EventAttribute
+import com.example.statisticator.models.schema.attributes.Attribute
 import com.example.statisticator.service.EventProcessor
 import com.example.statisticator.ui.attributes.AttributeEditingFragment
 import com.example.statisticator.ui.attributes.AttributeEditor
@@ -23,7 +23,7 @@ import java.io.Serializable
 class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
 
     private lateinit var event: Event
-    private lateinit var state: SessionState
+    private lateinit var state: LoggingState
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +31,9 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         if (savedInstanceState == null) {
-            event = intent.extras?.get(Constants.EVENT_EXTRAS_KEY) as? Event ?:
+            event = intent.extras?.get(Constants.ExtrasKeys.Event.value) as? Event ?:
                 throw Exception("Create event editing activity with no event in intent")
-            state = intent.extras?.get(Constants.SESSION_STATE_EXTRAS_KEY) as? SessionState ?:
+            state = intent.extras?.get(Constants.ExtrasKeys.LoggingState.value) as? LoggingState ?:
                 throw Exception("Create event editing activity with no session state in intent")
             setupUI()
         } else {
@@ -70,12 +70,12 @@ class EventEditingActivity : AppCompatActivity(), AttributeEditorDelegate {
     private fun saveEvent() {
         EventProcessor().saveEvent(event, state, this)
         val resultIntent = Intent()
-        resultIntent.putExtra(Constants.SESSION_STATE_EXTRAS_KEY, state)
+        resultIntent.putExtra(Constants.ExtrasKeys.LoggingState.value, state)
         setResult(Constants.EVENT_EDITING_OK, resultIntent)
         finish()
     }
 
-    override fun attributeValueDidChanged(attribute: EventAttribute, value: Serializable, editor: AttributeEditor) {
+    override fun attributeValueDidChanged(attribute: Attribute, value: Serializable, editor: AttributeEditor) {
         event.attributes[attribute.id] = value
     }
 }

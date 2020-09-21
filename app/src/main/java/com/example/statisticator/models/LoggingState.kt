@@ -2,7 +2,7 @@ package com.example.statisticator.models
 
 import java.io.Serializable
 
-class SessionState: Serializable {
+class LoggingState: Serializable {
 
     val variables: MutableMap<String, Serializable>
         get() = variablesContainer.values

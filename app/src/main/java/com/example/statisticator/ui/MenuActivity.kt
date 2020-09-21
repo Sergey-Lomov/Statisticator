@@ -20,16 +20,16 @@ import com.example.statisticator.service.SchemasManager
 
 class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
 
-    private lateinit var sessionState: SessionState
+    private lateinit var state: LoggingState
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val menu = intent.extras?.get(Constants.MENU_EXTRAS_KEY) as? MenuModel
+        val menu = intent.extras?.get(Constants.ExtrasKeys.Menu.value) as? MenuModel
             ?: SchemasManager(this).loadLastSchema().initalMenu
 
-        val sateExtras = intent.extras?.get(Constants.SESSION_STATE_EXTRAS_KEY) as? SessionState
-        sessionState = sateExtras ?: DataStoreManager(this).loadSessionState()
+        val sateExtras = intent.extras?.get(Constants.ExtrasKeys.LoggingState.value) as? LoggingState
+        state = sateExtras ?: DataStoreManager(this).loadSessionState()
 
         setContentView(R.layout.menu_activity)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -44,6 +44,13 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_main, menu)
+
+        val item = menu.findItem(R.id.action_analyse)
+        item.setOnMenuItemClickListener {
+            showAnalyse()
+            true
+        }
+
         return true
     }
 
@@ -65,8 +72,8 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Constants.EVENT_EDITING_OK) {
-            val newState = data?.extras?.get(Constants.SESSION_STATE_EXTRAS_KEY) as? SessionState
-            sessionState = newState ?: sessionState
+            val newState = data?.extras?.get(Constants.ExtrasKeys.LoggingState.value) as? LoggingState
+            state = newState ?: state
         }
 
         super.onActivityResult(requestCode, resultCode, data)
@@ -74,8 +81,8 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
 
     private fun showMenu(model: MenuModel) {
         val intent = Intent(this@MenuActivity, MenuActivity::class.java)
-        intent.putExtra(Constants.MENU_EXTRAS_KEY, model)
-        intent.putExtra(Constants.SESSION_STATE_EXTRAS_KEY, sessionState)
+        intent.putExtra(Constants.ExtrasKeys.Menu.value, model)
+        intent.putExtra(Constants.ExtrasKeys.LoggingState.value, state)
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
     }
@@ -84,9 +91,15 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
         val intent = Intent(this, EventEditingActivity::class.java)
         val timestamp = System.currentTimeMillis().toString()
         val event = Event(model, timestamp)
-        intent.putExtra(Constants.EVENT_EXTRAS_KEY, event)
-        intent.putExtra(Constants.SESSION_STATE_EXTRAS_KEY, sessionState)
+        intent.putExtra(Constants.ExtrasKeys.Event.value, event)
+        intent.putExtra(Constants.ExtrasKeys.LoggingState.value, state)
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivityForResult(intent, Constants.EVENT_EDITING_REQUEST_CODE)
+    }
+
+    private fun showAnalyse() {
+        val intent = Intent(this, RequestsListActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
     }
 }

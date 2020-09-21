@@ -1,7 +1,7 @@
 package com.example.statisticator.models.schema.attributes
 
 import com.example.statisticator.models.Event
-import com.example.statisticator.models.SessionState
+import com.example.statisticator.models.LoggingState
 import java.io.Serializable
 
 data class StateVariableAttribute (
@@ -9,7 +9,7 @@ data class StateVariableAttribute (
     val varKey: String
 ): CalculatableAttribute {
 
-    override fun calculateFor(event: Event, state: SessionState): Serializable? {
+    override fun calculateFor(event: Event, state: LoggingState): Serializable? {
         return state.variables[varKey]
     }
 }

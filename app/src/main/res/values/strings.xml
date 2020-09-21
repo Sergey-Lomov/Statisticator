@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Statisticator</string>
     <string name="action_schemas">Схемы</string>
+    <string name="action_analyse">Анализ</string>
     <!-- Strings used for fragments for navigation -->
     <string name="menu_fragment_label">Menu Fragment</string>
 

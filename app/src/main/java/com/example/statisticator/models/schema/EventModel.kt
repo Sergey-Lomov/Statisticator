@@ -1,15 +1,16 @@
 package com.example.statisticator.models.schema
 
-import com.example.statisticator.models.schema.attributes.EventAttribute
+import com.example.statisticator.models.schema.attributes.Attribute
 import com.example.statisticator.models.schema.modificators.SessionStateModificator
+import com.example.statisticator.service.factories.TypedEntitiesOwner
 
 data class EventModel (
-    val id: String,
+    override val id: String,
     val type: String,
     val title: String? = null,
-    val attributes: ArrayList<EventAttribute> = ArrayList(),
+    val attributes: ArrayList<Attribute> = ArrayList(),
     val modificators: ArrayList<SessionStateModificator> = ArrayList()
-): ItemTarget {
+): ItemTarget, TypedEntitiesOwner {
     override val targetType: ItemTargetType
         get() = ItemTargetType.Event
 }

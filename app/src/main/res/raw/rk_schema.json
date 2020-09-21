@@ -118,8 +118,23 @@
       ]
     }
   ],
-  "querys": [
+  "requests": [
     {
+      "id": "allStartGameEvents",
+      "title": "Партии",
+      "query": "eventsByType"
+    }
+  ],
+  "queries": [
+    {
+      "id": "eventsByType",
+      "attributes": [
+        {
+          "id": "type",
+          "type": "text_field",
+          "title": "Тип события"
+        }
+      ],
       "filter": {
         "type": "==",
         "key": "type",

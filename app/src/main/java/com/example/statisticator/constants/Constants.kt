@@ -37,14 +37,18 @@ class Constants {
         Timestamp("timestamp")
     }
 
+    enum class ExtrasKeys(val value: String) {
+        Menu("menuModel"),
+        Event("eventModel"),
+        LoggingState("loggingState"),
+        RequestsState("requestsState"),
+        Requests("requests")
+    }
+
     companion object {
 
         const val EVENT_EDITING_REQUEST_CODE = 1
         const val EVENT_EDITING_OK = 200
-
-        const val MENU_EXTRAS_KEY = "menuModel"
-        const val EVENT_EXTRAS_KEY = "eventModel"
-        const val SESSION_STATE_EXTRAS_KEY = "sessionState"
 
         const val DELEGATE_BUNDLE_KEY = "delegate"
         const val SESSION_STATE_BUNDLE_KEY = "sessionState"

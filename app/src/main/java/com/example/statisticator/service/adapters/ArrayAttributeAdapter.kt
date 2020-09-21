@@ -1,4 +1,4 @@
-package com.example.statisticator.service
+package com.example.statisticator.service.adapters
 
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.attributes.*

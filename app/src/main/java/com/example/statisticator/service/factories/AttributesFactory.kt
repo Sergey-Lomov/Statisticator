@@ -2,17 +2,13 @@ package com.example.statisticator.service.factories
 
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.attributes.*
-import com.example.statisticator.service.ArrayAttributeAdapter
-import com.example.statisticator.service.ColorsListAttributeAdapter
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
+import com.example.statisticator.service.adapters.ArrayAttributeAdapter
+import com.example.statisticator.service.adapters.ColorsListAttributeAdapter
 import java.lang.Exception
-import kotlin.reflect.KClass
 
 class AttributeParsingException(message:String, var attributeId: String? = null): Exception(message)
 
-class AttributesFactory : TypedEntitiesFactory<EventAttribute>() {
+class AttributesFactory : TypedEntitiesFactory<Attribute>() {
 
     override val typeToClass = mapOf(
         Constants.AttributeType.NumberInterval.value to NumberIntervalAttribute::class,
