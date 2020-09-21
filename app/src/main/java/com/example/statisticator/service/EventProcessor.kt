@@ -2,7 +2,6 @@ package com.example.statisticator.service
 
 import android.content.Context
 import com.example.statisticator.models.Event
-import com.example.statisticator.models.LoggingState
 import com.example.statisticator.models.schema.attributes.CalculatableAttribute
 
 class EventProcessor {
@@ -23,6 +22,5 @@ class EventProcessor {
         dataStoreManager.saveEvent(event)
         if (event.model.modificators.isNotEmpty())
             dataStoreManager.saveSessionState(state)
-
     }
 }

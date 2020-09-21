@@ -8,8 +8,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.statisticator.R
 import com.example.statisticator.constants.Constants
-import com.example.statisticator.models.LoggingState
+import com.example.statisticator.service.LoggingState
 import com.example.statisticator.models.schema.attributes.*
+import com.example.statisticator.service.ProcessingState
 import java.io.Serializable
 
 interface AttributeEditor {
@@ -30,7 +31,7 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate, AttributeEdito
 
     override var delegate: AttributeEditorDelegate? = null
     private var initialValue: Serializable? = null
-    private lateinit var state: LoggingState
+    private lateinit var state: ProcessingState
     private lateinit var attribute: EditableAttribute
     private lateinit var valuePresenter: ValuePresenter
 
@@ -40,8 +41,8 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate, AttributeEdito
     ): View? {
         delegate = arguments?.get(Constants.DELEGATE_BUNDLE_KEY) as? AttributeEditorDelegate
         initialValue = arguments?.get(Constants.INITIAL_VALUE_BUNDLE_KEY) as? Serializable
-        state = arguments?.get(Constants.SESSION_STATE_BUNDLE_KEY) as? LoggingState
-            ?: throw Exception("Create attribute editing fragment with no session state in arguments")
+        state = arguments?.get(Constants.SESSION_STATE_BUNDLE_KEY) as? ProcessingState
+            ?: throw Exception("Create attribute editing fragment with no processing state in arguments")
         attribute = arguments?.get(Constants.ATTRIBUTE_BUNDLE_KEY) as? EditableAttribute
             ?: throw Exception("Create attribute editing fragment with no attribute in arguments")
         val predefinedTitle = arguments?.get(Constants.PREDEFINED_TITLE_BUNDLE_KEY) as? String
@@ -86,7 +87,7 @@ class AttributeEditingFragment : Fragment(), ValueEditorDelegate, AttributeEdito
 
     companion object {
         fun newInstance(attribute: EditableAttribute,
-                        state: LoggingState,
+                        state: ProcessingState,
                         initialValue: Serializable? = null,
                         delegate: AttributeEditorDelegate? = null,
                         predefinedTitle: String? = null) = AttributeEditingFragment().apply {

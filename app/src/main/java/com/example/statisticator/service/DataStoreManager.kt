@@ -4,7 +4,6 @@ import android.content.Context
 import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.AttributesContainer
 import com.example.statisticator.models.Event
-import com.example.statisticator.models.LoggingState
 import com.example.statisticator.models.schema.EventModel
 import com.example.statisticator.models.schema.SchemaModel
 import com.example.statisticator.service.adapters.AttributesContainerAdapter

@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">Statisticator</string>
+    <string name="request_editing_title">Настройки запроса</string>
+
     <string name="action_schemas">Схемы</string>
     <string name="action_analyse">Анализ</string>
     <!-- Strings used for fragments for navigation -->
     <string name="menu_fragment_label">Menu Fragment</string>
 
     <string name="save_button_title">Сохранить событие</string>
+    <string name="execute_button_title">Выполнить запрос</string>
 </resources>

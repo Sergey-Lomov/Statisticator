@@ -1,10 +1,11 @@
-package com.example.statisticator.models
+package com.example.statisticator.service
 
+import com.example.statisticator.models.AttributesContainer
 import java.io.Serializable
 
-class LoggingState: Serializable {
+class LoggingState: ProcessingState {
 
-    val variables: MutableMap<String, Serializable>
+    override val variables: MutableMap<String, Serializable>
         get() = variablesContainer.values
     private val variablesContainer = AttributesContainer()
 

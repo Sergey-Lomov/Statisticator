@@ -1,7 +1,7 @@
 package com.example.statisticator.models.schema.modificators
 
 import com.example.statisticator.models.Event
-import com.example.statisticator.models.LoggingState
+import com.example.statisticator.service.LoggingState
 
 data class RemoveAdditionModificator (
     val attribute: String

@@ -6,14 +6,14 @@
     android:layout_height="wrap_content">
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/approveButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/attribute_content_hor_insets"
         android:layout_marginTop="@dimen/attribute_content_vert_insets"
         android:layout_marginEnd="@dimen/attribute_content_hor_insets"
         android:layout_marginBottom="@dimen/attribute_content_vert_insets"
-        android:text="@string/save_button_title"
+        android:text="Approve title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

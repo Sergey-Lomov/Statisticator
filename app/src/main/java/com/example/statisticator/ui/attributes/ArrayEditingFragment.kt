@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.statisticator.R
 import com.example.statisticator.constants.Constants
-import com.example.statisticator.models.LoggingState
+import com.example.statisticator.service.LoggingState
 import com.example.statisticator.models.schema.attributes.*
+import com.example.statisticator.service.ProcessingState
 import java.io.Serializable
 
 class ArrayEditingFragment : Fragment(), AttributeEditorDelegate {
@@ -26,8 +27,8 @@ class ArrayEditingFragment : Fragment(), AttributeEditorDelegate {
     ): View? {
         delegate = arguments?.get(Constants.DELEGATE_BUNDLE_KEY) as? ValueEditorDelegate
         initialValue = arguments?.get(Constants.INITIAL_VALUE_BUNDLE_KEY) as? Array<Serializable>
-        val state = arguments?.get(Constants.SESSION_STATE_BUNDLE_KEY) as? LoggingState
-            ?: throw Exception("Create array editing fragment with no session state in arguments")
+        val state = arguments?.get(Constants.SESSION_STATE_BUNDLE_KEY) as? ProcessingState
+            ?: throw Exception("Create array editing fragment with no processing state in arguments")
         attribute = arguments?.get(Constants.ATTRIBUTE_BUNDLE_KEY) as? ArrayAttribute
             ?: throw Exception("Create array editing fragment with no valid attribute in arguments")
 
@@ -75,7 +76,7 @@ class ArrayEditingFragment : Fragment(), AttributeEditorDelegate {
 
     companion object {
         fun newInstance(attribute: EditableAttribute,
-                        state: LoggingState,
+                        state: ProcessingState,
                         initialValue: Serializable? = null,
                         delegate: ValueEditorDelegate? = null) = ArrayEditingFragment().apply {
             arguments = Bundle().apply {

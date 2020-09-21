@@ -42,6 +42,7 @@ class Constants {
         Event("eventModel"),
         LoggingState("loggingState"),
         RequestsState("requestsState"),
+        Request("request"),
         Requests("requests")
     }
 

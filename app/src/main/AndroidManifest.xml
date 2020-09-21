@@ -12,6 +12,10 @@
         <activity android:name=".ui.EventEditingActivity"></activity>
         <activity android:name=".ui.RequestsListActivity"></activity>
         <activity
+            android:name=".ui.RequestEditingActivity"
+            android:label="@string/request_editing_title">
+        </activity>
+        <activity
             android:name=".ui.MenuActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
