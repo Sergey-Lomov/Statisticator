@@ -67,5 +67,4 @@ class MenuFragment : Fragment() {
         recyclerView.addItemDecoration(decoration)
         recyclerView.layoutManager = GridLayoutManager(activity, Constants.MENU_ITEMS_PER_ROW)
     }
-
 }

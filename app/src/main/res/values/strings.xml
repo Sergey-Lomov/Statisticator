@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Statisticator</string>
+    <string name="event_editing_title">Настройки события</string>
+    <string name="requests_list_title">Запросы</string>
     <string name="request_editing_title">Настройки запроса</string>
+    <string name="corteges_list_title">Результаты</string>
 
     <string name="action_schemas">Схемы</string>
     <string name="action_analyse">Анализ</string>

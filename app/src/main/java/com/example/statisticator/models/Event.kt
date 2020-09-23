@@ -25,7 +25,7 @@ class Event : Serializable {
 
     val model: EventModel
     val attributes: MutableMap<String, Serializable>
-        get() = attributesContainer.values
+        get() = attributesContainer.content
     val attributesContainer: AttributesContainer
 
     constructor(model: EventModel, timestamp: String) {

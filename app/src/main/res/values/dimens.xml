@@ -9,5 +9,6 @@
     <dimen name="attribute_content_vert_insets">10dp</dimen>
     <dimen name="attribute_value_editing_vert_insets">10dp</dimen>
     <dimen name="list_items_space">10dp</dimen>
+    <dimen name="cortege_items_space">5dp</dimen>
 
 </resources>

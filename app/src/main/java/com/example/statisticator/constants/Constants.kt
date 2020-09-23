@@ -43,7 +43,9 @@ class Constants {
         LoggingState("loggingState"),
         RequestsState("requestsState"),
         Request("request"),
-        Requests("requests")
+        Requests("requests"),
+        RequestResult("requestResult"),
+        RefetchEventsData("refetchEventsData")
     }
 
     companion object {

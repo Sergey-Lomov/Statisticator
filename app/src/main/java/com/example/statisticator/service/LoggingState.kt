@@ -6,10 +6,10 @@ import java.io.Serializable
 class LoggingState: ProcessingState {
 
     override val variables: MutableMap<String, Serializable>
-        get() = variablesContainer.values
+        get() = variablesContainer.content
     private val variablesContainer = AttributesContainer()
 
     val additions: MutableMap<String, Serializable>
-        get() = additionsContainer.values
+        get() = additionsContainer.content
     private val additionsContainer = AttributesContainer()
 }

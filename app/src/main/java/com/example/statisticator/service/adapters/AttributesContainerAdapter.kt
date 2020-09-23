@@ -18,7 +18,7 @@ class AttributesContainerAdapter: JsonSerializer<AttributesContainer>, JsonDeser
     ): JsonElement {
         val array = JsonArray()
 
-        src?.values?.forEach() {
+        src?.content?.forEach() {
             val attrObject = JsonObject()
             attrObject.addProperty(ATTRIBUTE, it.key);
             attrObject.addProperty(CLASSNAME, it.value::class.java.name);
@@ -49,7 +49,7 @@ class AttributesContainerAdapter: JsonSerializer<AttributesContainer>, JsonDeser
             map[attribute] = value as? Serializable ?: return@each
         }
 
-        container.values.putAll(map)
+        container.content.putAll(map)
         return container
     }
 }

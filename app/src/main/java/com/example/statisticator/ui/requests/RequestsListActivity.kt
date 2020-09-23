@@ -1,4 +1,4 @@
-package com.example.statisticator.ui
+package com.example.statisticator.ui.requests
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -13,6 +13,7 @@ import com.example.statisticator.constants.Constants
 import com.example.statisticator.models.schema.DataRequest
 import com.example.statisticator.service.RequestsState
 import com.example.statisticator.service.SchemasManager
+import com.example.statisticator.service.DataScopesManager
 
 class RequestsListActivity : AppCompatActivity(), RequestsListDelegate {
 
@@ -27,6 +28,12 @@ class RequestsListActivity : AppCompatActivity(), RequestsListDelegate {
 
         val sateExtras = intent.extras?.get(Constants.ExtrasKeys.RequestsState.value) as? RequestsState
         state = sateExtras ?: RequestsState()
+
+        val refetch = intent.extras?.get(Constants.ExtrasKeys.RefetchEventsData.value) as? Boolean ?: false
+        if (refetch) {
+            val schema = SchemasManager(this).loadLastSchema()
+            DataScopesManager.setupSharedFor(this, schema)
+        }
 
         setContentView(R.layout.requests_list_activity)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT

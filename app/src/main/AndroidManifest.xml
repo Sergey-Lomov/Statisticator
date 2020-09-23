@@ -9,10 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.EventEditingActivity"></activity>
-        <activity android:name=".ui.RequestsListActivity"></activity>
+        <activity android:name=".ui.requests.ResultCortegesActivity"
+            android:label="@string/corteges_list_title"></activity>
+        <activity android:name=".ui.requests.ResultGroupsActivity"></activity>
         <activity
-            android:name=".ui.RequestEditingActivity"
+            android:name=".ui.EventEditingActivity"
+            android:label="@string/event_editing_title"></activity>
+        <activity
+            android:name=".ui.requests.RequestsListActivity"
+            android:label="@string/requests_list_title"></activity>
+        <activity
+            android:name=".ui.requests.RequestEditingActivity"
             android:label="@string/request_editing_title">
         </activity>
         <activity

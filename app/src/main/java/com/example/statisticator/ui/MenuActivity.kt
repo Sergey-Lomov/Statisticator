@@ -17,6 +17,7 @@ import com.example.statisticator.models.schema.MenuModel
 import com.example.statisticator.service.DataStoreManager
 import com.example.statisticator.service.LoggingState
 import com.example.statisticator.service.SchemasManager
+import com.example.statisticator.ui.requests.RequestsListActivity
 
 
 class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
@@ -101,6 +102,7 @@ class MenuActivity : AppCompatActivity(), MenuFragmentDelegate {
     private fun showAnalyse() {
         val intent = Intent(this, RequestsListActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.putExtra(Constants.ExtrasKeys.RefetchEventsData.value, true)
         startActivity(intent)
     }
 }
